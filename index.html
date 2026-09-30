@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 مراجعة شاملة قبل الميد تيرم - رياضيات 11 متقدم</title>
+    <meta name="description" content="مراجعة شاملة قبل الميد تيرم - الدوال، التحليل البياني، الاستمرارية">
+    <meta name="author" content="Mr. Mohammed Hesham">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        body.en-mode { font-family: 'Inter', sans-serif; }
+        .correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+        .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.7; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @media print { .no-print { display: none !important; } }
+        .success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+        .grade-excellent { background: #dcfce7; color: #166534; }
+        .grade-good { background: #fef3c7; color: #92400e; }
+        .grade-pass { background: #dbeafe; color: #1e40af; }
+        .grade-fail { background: #fee2e2; color: #991b1b; }
+        .lang-switch {
+            position: fixed; top: 16px; left: 16px; z-index: 100;
+            background: white; padding: 6px; border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px;
+            border: 2px solid #0d9488;
+        }
+        [dir="ltr"] .lang-switch { left: auto; right: 16px; }
+        .lang-btn {
+            padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold;
+            transition: all 0.3s; border: none; font-size: 0.875rem;
+            background: transparent; color: #6b7280;
+        }
+        .lang-btn.active { background: #0d9488; color: white; box-shadow: 0 2px 6px rgba(13,148,136,0.4); }
+        .lang-btn:hover:not(.active) { background: #f0fdfa; color: #0d9488; }
+        .shuffle-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            color: white; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        .math-display {
+            display: inline-block; direction: ltr;
+            font-family: 'Times New Roman', 'Cambria Math', serif;
+            font-size: 1.15em; font-style: italic;
+            padding: 2px 8px; background: #f0fdfa;
+            border-radius: 6px; margin: 2px;
+            color: #0f766e; font-weight: 600; letter-spacing: 0.5px;
+        }
+        .save-indicator {
+            position: fixed; bottom: 20px; left: 20px; z-index: 200;
+            background: #10b981; color: white; padding: 8px 16px;
+            border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.4);
+        }
+        .save-indicator.show { opacity: 1; }
+        .formula-box {
+            background: #f0fdfa; border: 2px solid #14b8a6;
+            border-radius: 8px; padding: 12px; margin: 10px 0;
+            font-family: 'Times New Roman', serif;
+            direction: ltr; text-align: center;
+        }
+        .svg-graph {
+            display: block; margin: 12px auto; background: white;
+            border: 2px solid #e5e7eb; border-radius: 12px;
+            padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .graph-container { text-align: center; margin: 10px 0; }
+        .topic-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .topic-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-teal-50 to-emerald-50 text-gray-800 p-4 md:p-8 min-h-screen">
+
+    <div class="lang-switch no-print">
+        <button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+    </div>
+
+    <div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div id="dashboard" class="active-section">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white p-8 rounded-3xl shadow-2xl mb-8 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3">🎓 مراجعة شاملة قبل الميد تيرم</h1>
+                <p class="text-xl opacity-90" data-ar="الصف 11 متقدم - الدوال والتحليل البياني" data-en="Grade 11 Advanced - Functions & Graphical Analysis">الصف 11 متقدم - الدوال والتحليل البياني</p>
+                <p class="text-sm opacity-75 mt-2">Mr. Mohammed Hesham 📐</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1" data-ar="😊 الاسم" data-en="😊 Name">😊 الاسم</label>
+                        <input type="text" id="studentName" class="w-full border-2 border-teal-200 rounded-lg px-4 py-2 focus:border-teal-500 focus:outline-none" placeholder="اكتب اسمك">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1" data-ar="🏫 الشعبة" data-en="🏫 Class">🏫 الشعبة</label>
+                        <input type="text" id="studentClass" class="w-full border-2 border-teal-200 rounded-lg px-4 py-2 focus:border-teal-500 focus:outline-none" placeholder="الشعبة">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1" data-ar="📅 التاريخ" data-en="📅 Date">📅 التاريخ</label>
+                        <input type="text" id="examDate" class="w-full border-2 border-teal-200 rounded-lg px-4 py-2 focus:border-teal-500 focus:outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-ar="📚 اختر موضوع المراجعة" data-en="📚 Choose Review Topic">📚 اختر موضوع المراجعة</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" id="topics-grid"></div>
+        </div>
+    </div>
+
+    <!-- ==================== EXAM CONTAINER ==================== -->
+    <div id="exam-container" class="hidden-section p-4 md:p-8" style="display: none;">
+        <div class="max-w-4xl mx-auto mb-4 no-print">
+            <button onclick="goToDashboard()" class="bg-gray-700 hover:bg-gray-900 text-white px-6 py-2 rounded-xl font-medium transition shadow cursor-pointer">
+                ← <span data-ar="العودة للرئيسية" data-en="Back to Dashboard">العودة للرئيسية</span>
+            </button>
+        </div>
+
+        <div class="max-w-4xl mx-auto mb-4 text-center no-print">
+            <div class="bg-white p-4 rounded-2xl shadow-md inline-block border-2 border-teal-100">
+                <span class="text-gray-600 ml-2" data-ar="⏰ الوقت المتبقي:" data-en="⏰ Time Remaining:">⏰ الوقت المتبقي:</span>
+                <span id="timer" class="text-2xl font-bold text-teal-600 font-mono">60:00</span>
+                <span id="exam-badge" class="shuffle-badge inline-block bg-teal-600 text-white px-3 py-1 rounded-full text-xs font-bold mr-2">-</span>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+            <button onclick="toggleAnswers()" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="👀 إظهار / إخفاء الإجابات" data-en="👀 Show / Hide Answers">👀 إظهار / إخفاء الإجابات</button>
+            <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🖨️ طباعة" data-en="🖨️ Print">🖨️ طباعة</button>
+            <button onclick="reshuffleExam()" class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🔄 أسئلة جديدة" data-en="🔄 New Questions">🔄 أسئلة جديدة</button>
+            <button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🗑️ مسح التقدم" data-en="🗑️ Clear Progress">🗑️ مسح التقدم</button>
+        </div>
+
+        <header class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg mb-8 border-4 border-teal-400">
+            <div class="text-center">
+                <h1 id="exam-title" class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">-</h1>
+                <h2 id="exam-subtitle" class="text-lg text-teal-600 font-semibold">-</h2>
+                <p id="exam-description" class="text-sm text-gray-600 mt-2">-</p>
+                <p id="exam-info" class="text-xs text-green-600 mt-2 font-semibold">-</p>
+            </div>
+        </header>
+
+        <div id="formula-section" class="max-w-4xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-md border-2 border-teal-200 no-print">
+            <h3 class="font-bold text-lg mb-3 text-teal-700 text-center" data-ar="📐 المفاهيم الأساسية" data-en="📐 Key Concepts">📐 المفاهيم الأساسية</h3>
+            <div class="grid md:grid-cols-2 gap-3 text-sm" id="formula-boxes"></div>
+        </div>
+
+        <main class="max-w-4xl mx-auto space-y-8" id="exam-content"></main>
+
+        <div class="text-center no-print pb-8 mt-8">
+            <button onclick="gradeExam()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-lg px-10 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="🎯 صحح إجاباتي!" data-en="🎯 Grade My Answers!">🎯 صحح إجاباتي!</button>
+        </div>
+
+        <div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-4 border-teal-400 hidden no-print">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="🏆 نتيجتك يا بطل! 🏆" data-en="🏆 Your Results, Champion! 🏆">🏆 نتيجتك يا بطل! 🏆</h2>
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-teal-50 p-4 rounded-xl text-center"><p data-ar="😊 الاسم" data-en="😊 Name">😊 الاسم</p><p id="res-name" class="font-bold text-xl text-teal-700">-</p></div>
+                <div class="bg-emerald-50 p-4 rounded-xl text-center"><p data-ar="📅 التاريخ" data-en="📅 Date">📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-emerald-700">-</p></div>
+                <div class="bg-teal-50 p-4 rounded-xl text-center"><p data-ar="🌟 المجموع" data-en="🌟 Score">🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-teal-600">0 / 100</p></div>
+            </div>
+            <div class="text-center mb-6">
+                <span id="success-badge" class="success-badge grade-excellent">-</span>
+                <p id="success-percent" class="text-4xl font-bold text-teal-600 mt-2">0%</p>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-xl mb-6">
+                <h3 class="font-bold text-lg mb-4 text-gray-800" data-ar="📊 أدائك في كل قسم:" data-en="📊 Your Performance:">📊 أدائك في كل قسم:</h3>
+                <div class="space-y-3" id="sections-performance"></div>
+            </div>
+            <div class="text-center mb-6">
+                <button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition cursor-pointer" data-ar="📧 أرسل النتيجة للمعلم" data-en="📧 Send Results to Teacher">📧 أرسل النتيجة للمعلم</button>
+                <p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+            </div>
+        </div>
+
+        <footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+            © <span data-ar="مراجعة ميد تيرم رياضيات - صف 11 متقدم" data-en="Grade 11 Advanced Math Midterm Review">مراجعة ميد تيرم رياضيات - صف 11 متقدم</span> | Mr. Mohammed Hesham 📐
+        </footer>
+    </div>
+
+<script>
+// ==================== EmailJS Settings ====================
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+// ==================== Global State ====================
+let currentExam = null;
+let currentLang = 'ar';
+let currentSeed = null;
+let answersVisible = false;
+let timeRemaining = 0;
+let timerInterval = null;
+let examData = null;
+let correctAnswersMap = {};
+let saveIndicatorTimeout = null;
+const STORAGE_KEY = 'grade11_advanced_math_midterm_review_v1';
+
+// ==================== Mulberry32 RNG ====================
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+let rng = null;
+
+// ==================== SVG Graphs ====================
+const svgGraphs = {
+    absolute_value: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="290" height="250" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/><text x="150" y="25" text-anchor="middle" font-size="14" fill="#0f766e" font-weight="bold">y = |x| (قيمة مطلقة)</text><line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/><line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/><path d="M 50 200 L 150 120 L 250 200" fill="none" stroke="#0d9488" stroke-width="3"/><text x="150" y="245" text-anchor="middle" font-size="11" fill="#0f766e">يمر باختبار الخط العمودي ✓</text></svg>`,
+    circle_graph: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="290" height="250" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/><text x="150" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">x² + y² = r² (دائرة)</text><line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/><line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/><circle cx="150" cy="130" r="70" fill="none" stroke="#dc2626" stroke-width="3"/><line x1="100" y1="60" x2="100" y2="200" stroke="#dc2626" stroke-width="2" stroke-dasharray="4"/><text x="150" y="245" text-anchor="middle" font-size="11" fill="#991b1b">يفشل اختبار الخط العمودي ✗</text></svg>`,
+    sideways_parabola: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="290" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><text x="150" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">x = y² (قطع مكافئ جانبي)</text><line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/><line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/><path d="M 250 60 Q 150 130 250 200" fill="none" stroke="#f59e0b" stroke-width="3"/><line x1="220" y1="60" x2="220" y2="200" stroke="#dc2626" stroke-width="2" stroke-dasharray="4"/><text x="150" y="245" text-anchor="middle" font-size="11" fill="#92400e">يفشل اختبار الخط العمودي ✗</text></svg>`,
+    hyperbola: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="290" height="250" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/><text x="150" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">xy = 1 (قطع زائد)</text><line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/><line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/><path d="M 160 60 Q 200 100 270 130" fill="none" stroke="#7c3aed" stroke-width="3"/><path d="M 140 200 Q 100 160 40 130" fill="none" stroke="#7c3aed" stroke-width="3"/><text x="150" y="245" text-anchor="middle" font-size="11" fill="#5b21b6">يمر باختبار الخط العمودي ✓</text></svg>`,
+    domain_rational: `<svg class="svg-graph" width="340" height="200" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="190" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">مجال الدالة الكسرية</text><text x="170" y="55" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Times New Roman', serif">f(x) = P(x)/Q(x)</text><rect x="20" y="75" width="300" height="40" rx="6" fill="#fde68a" stroke="#f59e0b"/><text x="170" y="100" text-anchor="middle" font-size="13" fill="#92400e" font-weight="bold">الشرط: Q(x) ≠ 0</text><text x="170" y="140" text-anchor="middle" font-size="12" fill="#92400e">استبعد القيم التي تجعل المقام = 0</text><text x="170" y="165" text-anchor="middle" font-size="11" fill="#92400e">المجال = ℝ - {قيم المقام = 0}</text></svg>`,
+    domain_radical: `<svg class="svg-graph" width="340" height="200" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="190" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">مجال الدالة الجذرية</text><text x="170" y="55" text-anchor="middle" font-size="13" fill="#1e40af" font-family="'Times New Roman', serif">f(x) = √(g(x))</text><rect x="20" y="75" width="300" height="40" rx="6" fill="#bfdbfe" stroke="#2563eb"/><text x="170" y="100" text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold">الشرط: g(x) ≥ 0</text><text x="170" y="140" text-anchor="middle" font-size="12" fill="#1e40af">ما تحت الجذر يجب أن يكون ≥ 0</text><text x="170" y="165" text-anchor="middle" font-size="11" fill="#1e40af">مثال: √(x-3) → x ≥ 3</text></svg>`,
+    piecewise_graph: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="250" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">دالة متعددة التعريف</text><line x1="50" y1="220" x2="300" y2="220" stroke="#374151" stroke-width="2"/><line x1="170" y1="40" x2="170" y2="220" stroke="#374151" stroke-width="2"/><path d="M 70 180 L 170 80" stroke="#ec4899" stroke-width="3"/><circle cx="170" cy="80" r="5" fill="white" stroke="#ec4899" stroke-width="2"/><circle cx="170" cy="130" r="5" fill="#ec4899"/><path d="M 170 130 L 270 130" stroke="#ec4899" stroke-width="3"/><text x="170" y="245" text-anchor="middle" font-size="11" fill="#9f1239">قواعد مختلفة لفترات مختلفة</text></svg>`,
+    function_test: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="250" rx="12" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#0e7490" font-weight="bold">اختبار الخط الرأسي</text><line x1="50" y1="220" x2="300" y2="220" stroke="#374151" stroke-width="2"/><line x1="175" y1="40" x2="175" y2="220" stroke="#374151" stroke-width="2"/><path d="M 70 180 Q 175 80 280 180" fill="none" stroke="#0891b2" stroke-width="3"/><line x1="175" y1="60" x2="175" y2="200" stroke="#dc2626" stroke-width="2" stroke-dasharray="4"/><text x="175" y="235" text-anchor="middle" font-size="11" fill="#0e7490">دالة (نقطة واحدة)</text></svg>`,
+    not_function: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="250" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">ليس دالة</text><line x1="50" y1="220" x2="300" y2="220" stroke="#374151" stroke-width="2"/><line x1="175" y1="40" x2="175" y2="220" stroke="#374151" stroke-width="2"/><ellipse cx="175" cy="130" rx="80" ry="60" fill="none" stroke="#dc2626" stroke-width="3"/><line x1="175" y1="70" x2="175" y2="190" stroke="#dc2626" stroke-width="2" stroke-dasharray="4"/><text x="175" y="235" text-anchor="middle" font-size="11" fill="#991b1b">ليس دالة (نقطتان أو أكثر)</text></svg>`,
+    intercepts: `<svg class="svg-graph" width="340" height="260" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="250" rx="12" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#0f766e" font-weight="bold">التقاطعات</text><line x1="50" y1="220" x2="300" y2="220" stroke="#374151" stroke-width="2"/><line x1="175" y1="40" x2="175" y2="220" stroke="#374151" stroke-width="2"/><path d="M 70 180 Q 175 60 280 180" fill="none" stroke="#14b8a6" stroke-width="3"/><circle cx="100" cy="220" r="4" fill="#dc2626"/><circle cx="250" cy="220" r="4" fill="#dc2626"/><circle cx="175" cy="80" r="4" fill="#059669"/><text x="100" y="235" text-anchor="middle" font-size="9" fill="#dc2626">x-int</text><text x="250" y="235" text-anchor="middle" font-size="9" fill="#dc2626">x-int</text><text x="190" y="75" font-size="9" fill="#059669">y-int</text></svg>`,
+    continuity_graph: `<svg class="svg-graph" width="340" height="240" viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="230" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#0f766e" font-weight="bold">📐 شروط الاستمرارية</text><text x="170" y="60" text-anchor="middle" font-size="13" fill="#0f766e" font-family="'Times New Roman', serif">1. f(c) is defined</text><text x="170" y="90" text-anchor="middle" font-size="13" fill="#0f766e" font-family="'Times New Roman', serif">2. lim(x→c) f(x) exists</text><text x="170" y="120" text-anchor="middle" font-size="13" fill="#0f766e" font-family="'Times New Roman', serif">3. lim(x→c) f(x) = f(c)</text><text x="170" y="160" text-anchor="middle" font-size="12" fill="#0d9488" font-weight="bold">انقطاع قابل للإزالة: نهاية موجودة ≠ f(c)</text><text x="170" y="185" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">انقطاع لانهائي: نهاية = ±∞</text><text x="170" y="210" text-anchor="middle" font-size="12" fill="#7c3aed" font-weight="bold">انقطاع قفز: نهاية يسرى ≠ نهاية يمنى</text></svg>`,
+    arc_graph: `<svg class="svg-graph" width="340" height="240" viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="330" height="230" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/><text x="170" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📊 التحليل البياني للدوال</text><text x="170" y="60" text-anchor="middle" font-size="13" fill="#5b21b6" font-family="'Times New Roman', serif">ARC = [f(b) - f(a)] / (b - a)</text><text x="170" y="95" text-anchor="middle" font-size="12" fill="#059669" font-weight="bold">↑ متزايدة: f'(x) > 0</text><text x="170" y="125" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">↓ متناقصة: f'(x) &lt; 0</text><text x="170" y="155" text-anchor="middle" font-size="12" fill="#7c3aed" font-weight="bold">● قيمة حرجة: f'(x) = 0</text><text x="170" y="185" text-anchor="middle" font-size="12" fill="#0f766e" font-weight="bold">عظمى محلية: تغير من + إلى -</text><text x="170" y="215" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold">صغرى محلية: تغير من - إلى +</text></svg>`
+};
+
+// ==================== EXAMS DATABASE ====================
+const EXAMS_DB = {
+    functions_domains: {
+        id: 'functions_domains',
+        title: { ar: '📐 الدوال ومجالاتها', en: '📐 Functions & Their Domains' },
+        subtitle: { ar: 'رموز الفترات، تحديد الدوال، اختبار الخط العمودي، المجالات', en: 'Interval notation, identifying functions, vertical line test, domains' },
+        description: { ar: 'مراجعة شاملة للدوال متعددة التعريف والمجالات', en: 'Comprehensive review of piecewise functions and domains' },
+        duration: 3600,
+        color: 'from-teal-500 to-emerald-600',
+        icon: '📐',
+        formulae: [
+            { ar: '<strong>Interval Notation:</strong> (a, b), [a, b], (a, b], [a, b)', en: '<strong>Interval Notation:</strong> (a, b), [a, b], (a, b], [a, b)' },
+            { ar: '<strong>Set-builder:</strong> {x | condition}', en: '<strong>Set-builder:</strong> {x | condition}' },
+            { ar: '<strong>Function:</strong> كل x يقابله y واحد فقط', en: '<strong>Function:</strong> Each x maps to exactly one y' },
+            { ar: '<strong>Vertical Line Test:</strong> خط عمودي واحد يقطع الرسم مرة واحدة', en: '<strong>Vertical Line Test:</strong> One vertical line crosses graph once' }
+        ],
+        sections: [
+            {
+                title: { ar: '🔹 الجزء 1: رموز الفترات والمجموعات', en: '🔹 Part 1: Interval & Set Notation' },
+                questions: [
+                    { q: { ar: 'ما رمز الفترة للمجموعة <span class="math-display">{x | x > 50}</span>؟', en: 'What is the interval notation for <span class="math-display">{x | x > 50}</span>?' }, options: [{ ar: '<span class="math-display">(50, ∞)</span>', en: '<span class="math-display">(50, ∞)</span>' }, { ar: '<span class="math-display">[50, ∞)</span>', en: '<span class="math-display">[50, ∞)</span>' }, { ar: '<span class="math-display">(-∞, 50)</span>', en: '<span class="math-display">(-∞, 50)</span>' }, { ar: '<span class="math-display">(50, ∞]</span>', en: '<span class="math-display">(50, ∞]</span>' }], correct: 0, answer: { ar: 'x > 50 تعني أن 50 غير مشمولة، لذا نستخدم قوس مفتوح (50, ∞)', en: 'x > 50 means 50 is not included, so we use open parenthesis (50, ∞)' } },
+                    { q: { ar: 'ما رمز المجموعة (Set-builder) للفترة <span class="math-display">(-∞, -13)</span>؟', en: 'What is the set-builder notation for <span class="math-display">(-∞, -13)</span>?' }, options: [{ ar: '<span class="math-display">{x | x < -13}</span>', en: '<span class="math-display">{x | x < -13}</span>' }, { ar: '<span class="math-display">{x | x ≤ -13}</span>', en: '<span class="math-display">{x | x ≤ -13}</span>' }, { ar: '<span class="math-display">{x | x > -13}</span>', en: '<span class="math-display">{x | x > -13}</span>' }, { ar: '<span class="math-display">{x | x ≥ -13}</span>', en: '<span class="math-display">{x | x ≥ -13}</span>' }], correct: 0, answer: { ar: 'القوس المفتوح عند -13 يعني x < -13 (غير مشمول)', en: 'Open parenthesis at -13 means x < -13 (not included)' } },
+                    { q: { ar: 'ما رمز الفترة للمجموعة <span class="math-display">{x | -31 < x ≤ 64}</span>؟', en: 'What is the interval notation for <span class="math-display">{x | -31 < x ≤ 64}</span>?' }, options: [{ ar: '<span class="math-display">(-31, 64]</span>', en: '<span class="math-display">(-31, 64]</span>' }, { ar: '<span class="math-display">[-31, 64]</span>', en: '<span class="math-display">[-31, 64]</span>' }, { ar: '<span class="math-display">(-31, 64)</span>', en: '<span class="math-display">(-31, 64)</span>' }, { ar: '<span class="math-display">[-31, 64)</span>', en: '<span class="math-display">[-31, 64)</span>' }], correct: 0, answer: { ar: '-31 غير مشمولة (قوس مفتوح)، 64 مشمولة (قوس مربع): (-31, 64]', en: '-31 not included (open), 64 included (closed): (-31, 64]' } },
+                    { q: { ar: 'ما رمز الفترة لاتحاد <span class="math-display">{x | x < -19 أو x > 21}</span>؟', en: 'What is the interval notation for <span class="math-display">{x | x < -19 or x > 21}</span>?' }, options: [{ ar: '<span class="math-display">(-∞, -19) ∪ (21, ∞)</span>', en: '<span class="math-display">(-∞, -19) ∪ (21, ∞)</span>' }, { ar: '<span class="math-display">(-∞, -19] ∪ [21, ∞)</span>', en: '<span class="math-display">(-∞, -19] ∪ [21, ∞)</span>' }, { ar: '<span class="math-display">[-19, 21]</span>', en: '<span class="math-display">[-19, 21]</span>' }, { ar: '<span class="math-display">(-19, 21)</span>', en: '<span class="math-display">(-19, 21)</span>' }], correct: 0, answer: { ar: 'اتحاد فترتين منفصلتين: (-∞, -19) ∪ (21, ∞)', en: 'Union of two separate intervals: (-∞, -19) ∪ (21, ∞)' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 2: تحديد الدوال', en: '🔹 Part 2: Identifying Functions' },
+                questions: [
+                    { q: { ar: 'هل العلاقة <span class="math-display">x² = y + 2</span> تمثل دالة y من x؟', en: 'Does <span class="math-display">x² = y + 2</span> represent y as a function of x?' }, options: [{ ar: 'نعم، لأن لكل x قيمة y واحدة: y = x² - 2', en: 'Yes, because each x has one y: y = x² - 2' }, { ar: 'لا، لأن لكل x قيمتين لـ y', en: 'No, because each x has two y values' }, { ar: 'نعم، لأنها معادلة خطية', en: 'Yes, because it is linear' }, { ar: 'لا، لأنها تحتوي على x²', en: 'No, because it contains x²' }], correct: 0, answer: { ar: 'y = x² - 2، لكل x قيمة y واحدة فقط → دالة', en: 'y = x² - 2, each x has exactly one y → function' } },
+                    { q: { ar: 'هل المعادلة <span class="math-display">4y² + 18 = 96x</span> تمثل دالة y من x؟', en: 'Does <span class="math-display">4y² + 18 = 96x</span> represent y as a function of x?' }, options: [{ ar: 'نعم، دالة خطية', en: 'Yes, linear function' }, { ar: 'لا، لأن y = ±√(24x - 4.5) - قيمتان لكل x', en: 'No, because y = ±√(24x - 4.5) - two values for each x' }, { ar: 'نعم، لأن y² موجب', en: 'Yes, because y² is positive' }, { ar: 'لا، لأن x سالب', en: 'No, because x is negative' }], correct: 1, answer: { ar: 'y = ±√(24x - 4.5)، لكل x قيمتان لـ y → ليست دالة', en: 'y = ±√(24x - 4.5), each x has two y values → not a function' } },
+                    { q: { ar: 'جدول: x=0.04 يقابله y=449 و y=451. هل يمثل دالة؟', en: 'Table: x=0.04 corresponds to y=449 and y=451. Is it a function?' }, options: [{ ar: 'نعم، لأن القيم قريبة', en: 'Yes, because values are close' }, { ar: 'لا، لأن x=0.04 له قيمتا y مختلفتان', en: 'No, because x=0.04 has two different y values' }, { ar: 'نعم، لأن y قيم عددية', en: 'Yes, because y values are numeric' }, { ar: 'لا يمكن التحديد', en: 'Cannot determine' }], correct: 1, answer: { ar: 'في الدالة، كل x يجب أن يقابله y واحد فقط. هنا x=0.04 له قيمتان → ليست دالة', en: 'In a function, each x must have only one y. Here x=0.04 has two values → not a function' } },
+                    { q: { ar: 'أي من المعادلات التالية تمثل دالة y من x؟', en: 'Which equation represents y as a function of x?' }, options: [{ ar: '<span class="math-display">3y + 4x = 11</span> (y = (11-4x)/3)', en: '<span class="math-display">3y + 4x = 11</span> (y = (11-4x)/3)' }, { ar: '<span class="math-display">x/y = y - 6</span>', en: '<span class="math-display">x/y = y - 6</span>' }, { ar: '<span class="math-display">y² = x + 5</span>', en: '<span class="math-display">y² = x + 5</span>' }, { ar: '<span class="math-display">x² + y² = 25</span>', en: '<span class="math-display">x² + y² = 25</span>' }], correct: 0, answer: { ar: '3y + 4x = 11 → y = (11-4x)/3، لكل x قيمة y واحدة', en: '3y + 4x = 11 → y = (11-4x)/3, each x has one y' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 3: اختبار الخط العمودي', en: '🔹 Part 3: Vertical Line Test' },
+                questions: [
+                    { q: { ar: 'أي رسم بياني يمثل دالة حسب اختبار الخط العمودي؟', en: 'Which graph represents a function according to the vertical line test?' }, svg: svgGraphs.absolute_value, options: [{ ar: 'الرسم على شكل V (قيمة مطلقة)', en: 'V-shaped graph (absolute value)' }, { ar: 'الدائرة', en: 'Circle' }, { ar: 'القطع المكافئ الجانبي', en: 'Sideways parabola' }, { ar: 'جميع ما سبق', en: 'All of the above' }], correct: 0, answer: { ar: 'شكل V يمر باختبار الخط العمودي: كل خط عمودي يقطع الرسم مرة واحدة فقط', en: 'V-shape passes vertical line test: each vertical line crosses graph only once' } },
+                    { q: { ar: 'لماذا الدائرة <span class="math-display">x² + y² = r²</span> لا تمثل دالة؟', en: 'Why does circle <span class="math-display">x² + y² = r²</span> not represent a function?' }, svg: svgGraphs.circle_graph, options: [{ ar: 'لأنها مغلقة', en: 'Because it is closed' }, { ar: 'لأن الخط العمودي يقطعها في نقطتين', en: 'Because vertical line crosses it at two points' }, { ar: 'لأنها متماثلة', en: 'Because it is symmetric' }, { ar: 'لأن r ثابت', en: 'Because r is constant' }], correct: 1, answer: { ar: 'الخط العمودي يقطع الدائرة في نقطتين (y موجب و y سالب) → لكل x قيمتان لـ y', en: 'Vertical line crosses circle at two points (positive and negative y) → each x has two y values' } },
+                    { q: { ar: 'القطع المكافئ الجانبي <span class="math-display">x = y²</span> هل هو دالة؟', en: 'Is the sideways parabola <span class="math-display">x = y²</span> a function?' }, svg: svgGraphs.sideways_parabola, options: [{ ar: 'نعم، دالة', en: 'Yes, function' }, { ar: 'لا، لأنه يفشل اختبار الخط العمودي', en: 'No, fails vertical line test' }, { ar: 'نعم، لكنه خطي', en: 'Yes, but linear' }, { ar: 'دالة فقط لـ x > 0', en: 'Function only for x > 0' }], correct: 1, answer: { ar: 'x = y² → y = ±√x، لكل x>0 قيمتان لـ y → يفشل اختبار الخط العمودي', en: 'x = y² → y = ±√x, each x>0 has two y values → fails vertical line test' } },
+                    { q: { ar: 'ما هو اختبار الخط العمودي (Vertical Line Test)؟', en: 'What is the Vertical Line Test?' }, options: [{ ar: 'إذا قطع أي خط عمودي الرسم مرة واحدة فقط، فهو دالة', en: 'If any vertical line crosses graph only once, it is a function' }, { ar: 'إذا قطع الخط الأفقي الرسم مرة واحدة', en: 'If horizontal line crosses graph once' }, { ar: 'إذا كان الرسم متصلاً', en: 'If graph is continuous' }, { ar: 'إذا كان الرسم متماثلاً', en: 'If graph is symmetric' }], correct: 0, answer: { ar: 'اختبار الخط العمودي: ارسم خطوطاً عمودية، إذا كل خط يقطع الرسم مرة واحدة فقط → دالة', en: 'Vertical Line Test: draw vertical lines, if each crosses graph only once → function' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 4: تحديد مجال الدالة', en: '🔹 Part 4: Finding Function Domains' },
+                questions: [
+                    { q: { ar: 'ما مجال الدالة <span class="math-display">f(x) = (8x+12)/(x²+5x+4)</span>؟', en: 'What is the domain of <span class="math-display">f(x) = (8x+12)/(x²+5x+4)</span>?' }, svg: svgGraphs.domain_rational, options: [{ ar: '<span class="math-display">(-∞, -4) ∪ (-4, -1) ∪ (-1, ∞)</span>', en: '<span class="math-display">(-∞, -4) ∪ (-4, -1) ∪ (-1, ∞)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">(-4, -1)</span>', en: '<span class="math-display">(-4, -1)</span>' }, { ar: '<span class="math-display">[-4, -1]</span>', en: '<span class="math-display">[-4, -1]</span>' }], correct: 0, answer: { ar: 'المقام = (x+1)(x+4) ≠ 0 → x ≠ -1 و x ≠ -4. المجال: كل الأعداد الحقيقية ما عدا -1 و -4', en: 'Denominator = (x+1)(x+4) ≠ 0 → x ≠ -1 and x ≠ -4. Domain: all reals except -1 and -4' } },
+                    { q: { ar: 'ما مجال الدالة <span class="math-display">h(x) = √(6 - x²)</span>؟', en: 'What is the domain of <span class="math-display">h(x) = √(6 - x²)</span>?' }, svg: svgGraphs.domain_radical, options: [{ ar: '<span class="math-display">[-√6, √6]</span>', en: '<span class="math-display">[-√6, √6]</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">[0, ∞)</span>', en: '<span class="math-display">[0, ∞)</span>' }, { ar: '<span class="math-display">(-√6, √6)</span>', en: '<span class="math-display">(-√6, √6)</span>' }], correct: 0, answer: { ar: 'يجب 6-x² ≥ 0 → x² ≤ 6 → -√6 ≤ x ≤ √6. المجال: [-√6, √6]', en: 'Need 6-x² ≥ 0 → x² ≤ 6 → -√6 ≤ x ≤ √6. Domain: [-√6, √6]' } },
+                    { q: { ar: 'ما مجال الدالة <span class="math-display">f(a) = 5a/√(4a-1)</span>؟', en: 'What is the domain of <span class="math-display">f(a) = 5a/√(4a-1)</span>?' }, options: [{ ar: '<span class="math-display">(1/4, ∞)</span>', en: '<span class="math-display">(1/4, ∞)</span>' }, { ar: '<span class="math-display">[1/4, ∞)</span>', en: '<span class="math-display">[1/4, ∞)</span>' }, { ar: '<span class="math-display">(-∞, 1/4)</span>', en: '<span class="math-display">(-∞, 1/4)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }], correct: 0, answer: { ar: 'يجب 4a-1 > 0 (صارم لأن في المقام) → a > 1/4. المجال: (1/4, ∞)', en: 'Need 4a-1 > 0 (strict because in denominator) → a > 1/4. Domain: (1/4, ∞)' } },
+                    { q: { ar: 'ما مجال الدالة <span class="math-display">g(x) = 6/(x+3) + 2/(x-4)</span>؟', en: 'What is the domain of <span class="math-display">g(x) = 6/(x+3) + 2/(x-4)</span>?' }, options: [{ ar: '<span class="math-display">(-∞, -3) ∪ (-3, 4) ∪ (4, ∞)</span>', en: '<span class="math-display">(-∞, -3) ∪ (-3, 4) ∪ (4, ∞)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">(-3, 4)</span>', en: '<span class="math-display">(-3, 4)</span>' }, { ar: '<span class="math-display">[-3, 4]</span>', en: '<span class="math-display">[-3, 4]</span>' }], correct: 0, answer: { ar: 'المقامات ≠ 0: x+3 ≠ 0 → x ≠ -3، و x-4 ≠ 0 → x ≠ 4', en: 'Denominators ≠ 0: x+3 ≠ 0 → x ≠ -3, and x-4 ≠ 0 → x ≠ 4' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 5: الدوال متعددة التعريف', en: '🔹 Part 5: Piecewise Functions' },
+                questions: [
+                    { q: { ar: '<span class="math-display">f(x) = {-4x+3, x<3; -x³, 3≤x≤8; 3x²+1, x>8}</span>. ما قيمة <span class="math-display">f(-5)</span>؟', en: '<span class="math-display">f(x) = {-4x+3, x<3; -x³, 3≤x≤8; 3x²+1, x>8}</span>. Find <span class="math-display">f(-5)</span>.' }, svg: svgGraphs.piecewise_graph, options: [{ ar: '<span class="math-display">23</span>', en: '<span class="math-display">23</span>' }, { ar: '<span class="math-display">-17</span>', en: '<span class="math-display">-17</span>' }, { ar: '<span class="math-display">125</span>', en: '<span class="math-display">125</span>' }, { ar: '<span class="math-display">76</span>', en: '<span class="math-display">76</span>' }], correct: 0, answer: { ar: '-5 < 3، نستخدم القاعدة الأولى: f(-5) = -4(-5)+3 = 20+3 = 23', en: '-5 < 3, use first rule: f(-5) = -4(-5)+3 = 20+3 = 23' } },
+                    { q: { ar: 'نفس الدالة السابقة. ما قيمة <span class="math-display">f(12)</span>؟', en: 'Same function. Find <span class="math-display">f(12)</span>.' }, options: [{ ar: '<span class="math-display">433</span>', en: '<span class="math-display">433</span>' }, { ar: '<span class="math-display">145</span>', en: '<span class="math-display">145</span>' }, { ar: '<span class="math-display">-1728</span>', en: '<span class="math-display">-1728</span>' }, { ar: '<span class="math-display">37</span>', en: '<span class="math-display">37</span>' }], correct: 0, answer: { ar: '12 > 8، نستخدم القاعدة الثالثة: f(12) = 3(12)²+1 = 432+1 = 433', en: '12 > 8, use third rule: f(12) = 3(12)²+1 = 432+1 = 433' } },
+                    { q: { ar: '<span class="math-display">f(x) = {2x²+6x+4, x<-4; 6-x², -4≤x<12; 14, x≥12}</span>. ما <span class="math-display">f(-5)</span>؟', en: '<span class="math-display">f(x) = {2x²+6x+4, x<-4; 6-x², -4≤x<12; 14, x≥12}</span>. Find <span class="math-display">f(-5)</span>.' }, options: [{ ar: '<span class="math-display">24</span>', en: '<span class="math-display">24</span>' }, { ar: '<span class="math-display">-19</span>', en: '<span class="math-display">-19</span>' }, { ar: '<span class="math-display">14</span>', en: '<span class="math-display">14</span>' }, { ar: '<span class="math-display">-10</span>', en: '<span class="math-display">-10</span>' }], correct: 0, answer: { ar: '-5 < -4، نستخدم القاعدة الأولى: f(-5) = 2(25)+6(-5)+4 = 50-30+4 = 24', en: '-5 < -4, use first rule: f(-5) = 2(25)+6(-5)+4 = 50-30+4 = 24' } },
+                    { q: { ar: '<span class="math-display">f(x) = {-15, x<-5; √(x+6), -5≤x≤10; 2/x+8, x>10}</span>. ما <span class="math-display">f(-5)</span>؟', en: '<span class="math-display">f(x) = {-15, x<-5; √(x+6), -5≤x≤10; 2/x+8, x>10}</span>. Find <span class="math-display">f(-5)</span>.' }, options: [{ ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }, { ar: '<span class="math-display">-15</span>', en: '<span class="math-display">-15</span>' }, { ar: '<span class="math-display">√1</span>', en: '<span class="math-display">√1</span>' }, { ar: '<span class="math-display">7.6</span>', en: '<span class="math-display">7.6</span>' }], correct: 0, answer: { ar: '-5 ≤ -5 ≤ 10، نستخدم القاعدة الثانية: f(-5) = √(-5+6) = √1 = 1', en: '-5 ≤ -5 ≤ 10, use second rule: f(-5) = √(-5+6) = √1 = 1' } }
+                ]
+            }
+        ]
+    },
+    graph_analysis: {
+        id: 'graph_analysis',
+        title: { ar: '📊 تحليل التمثيلات البيانية', en: '📊 Graphical Analysis of Relations' },
+        subtitle: { ar: 'التحقق من الدوال، إيجاد التقاطعات، تحليل الرسوم البيانية', en: 'Verifying functions, finding intercepts, analyzing graphs' },
+        description: { ar: 'مراجعة شاملة لتحليل الرسوم البيانية للدوال والعلاقات', en: 'Comprehensive review of graphical analysis of functions and relations' },
+        duration: 3600,
+        color: 'from-cyan-500 to-sky-600',
+        icon: '📊',
+        formulae: [
+            { ar: '<strong>اختبار الخط العمودي:</strong> إذا قطع أي خط عمودي الرسم مرة واحدة فقط، فهو دالة', en: '<strong>Vertical Line Test:</strong> If any vertical line crosses graph once, it is a function' },
+            { ar: '<strong>التقاطع مع x:</strong> عوّض y = 0', en: '<strong>x-intercept:</strong> Set y = 0' },
+            { ar: '<strong>التقاطع مع y:</strong> عوّض x = 0', en: '<strong>y-intercept:</strong> Set x = 0' },
+            { ar: '<strong>الدالة الفردية:</strong> f(-x) = -f(x)', en: '<strong>Odd Function:</strong> f(-x) = -f(x)' }
+        ],
+        sections: [
+            {
+                title: { ar: '🔹 الجزء 1: اختبار الدوال (الخط الرأسي)', en: '🔹 Part 1: Function Test (Vertical Line)' },
+                questions: [
+                    { q: { ar: 'أي من الرسوم التالية يمثل دالة؟', en: 'Which of the following graphs represents a function?' }, svg: svgGraphs.function_test, options: [{ ar: 'الرسم الذي يقطعه الخط الرأسي في نقطة واحدة فقط', en: 'Graph intersected by vertical line at one point only' }, { ar: 'الرسم الذي يقطعه الخط الرأسي في نقطتين', en: 'Graph intersected by vertical line at two points' }, { ar: 'الدائرة', en: 'Circle' }, { ar: 'القطع الناقص', en: 'Ellipse' }], correct: 0, answer: { ar: 'الدالة يجب أن تقطع بأي خط رأسي في نقطة واحدة فقط (اختبار الخط الرأسي)', en: 'A function must intersect any vertical line at only one point (vertical line test)' } },
+                    { q: { ar: 'هل المعادلة <span class="math-display">x² + 4y² = 16</span> تمثل دالة؟', en: 'Does the equation <span class="math-display">x² + 4y² = 16</span> represent a function?' }, svg: svgGraphs.not_function, options: [{ ar: 'لا، لأنها قطع ناقص', en: 'No, it is an ellipse' }, { ar: 'نعم، لأنها معادلة تربيعية', en: 'Yes, it is a quadratic equation' }, { ar: 'نعم، لأنها دائرة', en: 'Yes, it is a circle' }, { ar: 'لا، لأنها خط مستقيم', en: 'No, it is a straight line' }], correct: 0, answer: { ar: 'القطع الناقص لا يمثل دالة لأن الخط الرأسي يقطعه في نقطتين', en: 'An ellipse is not a function because a vertical line intersects it at two points' } },
+                    { q: { ar: 'هل المعادلة <span class="math-display">y = x² - 2x + 3</span> تمثل دالة؟', en: 'Does the equation <span class="math-display">y = x² - 2x + 3</span> represent a function?' }, options: [{ ar: 'نعم، لأنها قطع مكافئ', en: 'Yes, it is a parabola' }, { ar: 'لا، لأنها معادلة تربيعية', en: 'No, it is a quadratic equation' }, { ar: 'لا، لأنها دائرة', en: 'No, it is a circle' }, { ar: 'نعم، لأنها خط مستقيم', en: 'Yes, it is a straight line' }], correct: 0, answer: { ar: 'القطع المكافئ الذي يفتح للأعلى أو الأسفل يمثل دالة', en: 'A parabola that opens up or down represents a function' } },
+                    { q: { ar: 'أي من التالي ليس دالة؟', en: 'Which of the following is NOT a function?' }, options: [{ ar: '<span class="math-display">x = y² - 3</span>', en: '<span class="math-display">x = y² - 3</span>' }, { ar: '<span class="math-display">y = x² + 6x + 10</span>', en: '<span class="math-display">y = x² + 6x + 10</span>' }, { ar: '<span class="math-display">f(x) = |x| + 2</span>', en: '<span class="math-display">f(x) = |x| + 2</span>' }, { ar: '<span class="math-display">y = 2x³ - x² - 3x</span>', en: '<span class="math-display">y = 2x³ - x² - 3x</span>' }], correct: 0, answer: { ar: 'x = y² - 3 تمثل قطع مكافئ يفتح لليمين، والخط الرأسي يقطعه في أكثر من نقطة', en: 'x = y² - 3 is a parabola opening right, vertical line intersects at more than one point' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 2: إيجاد التقاطعات', en: '🔹 Part 2: Finding Intercepts' },
+                questions: [
+                    { q: { ar: 'أوجد التقاطع مع المحور y للدالة <span class="math-display">f(x) = x² + 6x + 10</span>', en: 'Find the y-intercept of <span class="math-display">f(x) = x² + 6x + 10</span>' }, svg: svgGraphs.intercepts, options: [{ ar: '<span class="math-display">(0, 10)</span>', en: '<span class="math-display">(0, 10)</span>' }, { ar: '<span class="math-display">(10, 0)</span>', en: '<span class="math-display">(10, 0)</span>' }, { ar: '<span class="math-display">(0, 6)</span>', en: '<span class="math-display">(0, 6)</span>' }, { ar: '<span class="math-display">(6, 0)</span>', en: '<span class="math-display">(6, 0)</span>' }], correct: 0, answer: { ar: 'عند x = 0: f(0) = 0 + 0 + 10 = 10، إذن التقاطع (0, 10)', en: 'At x = 0: f(0) = 0 + 0 + 10 = 10, so intercept is (0, 10)' } },
+                    { q: { ar: 'أوجد التقاطعات مع المحور x للدالة <span class="math-display">f(x) = x² - 6x + 9</span>', en: 'Find the x-intercepts of <span class="math-display">f(x) = x² - 6x + 9</span>' }, options: [{ ar: '<span class="math-display">(3, 0)</span> (نقطة واحدة)', en: '<span class="math-display">(3, 0)</span> (one point)' }, { ar: '<span class="math-display">(0, 9)</span>', en: '<span class="math-display">(0, 9)</span>' }, { ar: '<span class="math-display">(9, 0)</span>', en: '<span class="math-display">(9, 0)</span>' }, { ar: '<span class="math-display">(6, 0)</span>', en: '<span class="math-display">(6, 0)</span>' }], correct: 0, answer: { ar: 'x² - 6x + 9 = 0 → (x-3)² = 0 → x = 3 (نقطة واحدة)', en: 'x² - 6x + 9 = 0 → (x-3)² = 0 → x = 3 (one point)' } },
+                    { q: { ar: 'إذا كان <span class="math-display">f(x) = -2x³ + 5x - 4</span>، فما قيمة <span class="math-display">f(0)</span>؟', en: 'If <span class="math-display">f(x) = -2x³ + 5x - 4</span>, what is <span class="math-display">f(0)</span>?' }, options: [{ ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' }, { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' }, { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }, { ar: '<span class="math-display">-2</span>', en: '<span class="math-display">-2</span>' }], correct: 0, answer: { ar: 'f(0) = -2(0)³ + 5(0) - 4 = -4', en: 'f(0) = -2(0)³ + 5(0) - 4 = -4' } },
+                    { q: { ar: 'أوجد التقاطع مع المحور y للمعادلة <span class="math-display">36(y+4)² - 16(x-3)² = 576</span>', en: 'Find the y-intercept of <span class="math-display">36(y+4)² - 16(x-3)² = 576</span>' }, options: [{ ar: 'عند x = 0، نحل المعادلة لإيجاد y', en: 'At x = 0, solve for y' }, { ar: 'عند y = 0، نحل المعادلة لإيجاد x', en: 'At y = 0, solve for x' }, { ar: 'لا يوجد تقاطع', en: 'No intercept' }, { ar: 'التقاطع عند الأصل', en: 'Intercept at origin' }], correct: 0, answer: { ar: 'لإيجاد التقاطع مع المحور y، نعوض x = 0 ونحل لإيجاد y', en: 'To find y-intercept, substitute x = 0 and solve for y' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 3: تحليل الرسوم البيانية', en: '🔹 Part 3: Graph Analysis' },
+                questions: [
+                    { q: { ar: 'من الرسم البياني، إذا كان <span class="math-display">f(x) = |x| + 2</span>، فما قيمة <span class="math-display">f(-3)</span>؟', en: 'From the graph, if <span class="math-display">f(x) = |x| + 2</span>, what is <span class="math-display">f(-3)</span>?' }, options: [{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }, { ar: '<span class="math-display">-1</span>', en: '<span class="math-display">-1</span>' }, { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' }, { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' }], correct: 0, answer: { ar: 'f(-3) = |-3| + 2 = 3 + 2 = 5', en: 'f(-3) = |-3| + 2 = 3 + 2 = 5' } },
+                    { q: { ar: 'إذا كان <span class="math-display">f(x) = √(x-1)</span>، فما هو مجال الدالة؟', en: 'If <span class="math-display">f(x) = √(x-1)</span>, what is the domain?' }, options: [{ ar: '<span class="math-display">x ≥ 1</span>', en: '<span class="math-display">x ≥ 1</span>' }, { ar: '<span class="math-display">x ≥ 0</span>', en: '<span class="math-display">x ≥ 0</span>' }, { ar: 'جميع الأعداد الحقيقية', en: 'All real numbers' }, { ar: '<span class="math-display">x > 1</span>', en: '<span class="math-display">x > 1</span>' }], correct: 0, answer: { ar: 'الجذر التربيعي يتطلب أن يكون ما تحته ≥ 0، إذن x - 1 ≥ 0 → x ≥ 1', en: 'Square root requires radicand ≥ 0, so x - 1 ≥ 0 → x ≥ 1' } },
+                    { q: { ar: 'ما نوع الدالة <span class="math-display">f(x) = x³</span>؟', en: 'What type of function is <span class="math-display">f(x) = x³</span>?' }, options: [{ ar: 'دالة فردية (Odd function)', en: 'Odd function' }, { ar: 'دالة زوجية (Even function)', en: 'Even function' }, { ar: 'ليست زوجية ولا فردية', en: 'Neither even nor odd' }, { ar: 'دالة ثابتة', en: 'Constant function' }], correct: 0, answer: { ar: 'f(-x) = (-x)³ = -x³ = -f(x)، إذن دالة فردية', en: 'f(-x) = (-x)³ = -x³ = -f(x), so it is an odd function' } },
+                    { q: { ar: 'أي من الدوال التالية لها تقاطعان مع المحور x؟', en: 'Which of the following functions has two x-intercepts?' }, options: [{ ar: '<span class="math-display">f(x) = x² - 5x + 6</span>', en: '<span class="math-display">f(x) = x² - 5x + 6</span>' }, { ar: '<span class="math-display">f(x) = x² + 4</span>', en: '<span class="math-display">f(x) = x² + 4</span>' }, { ar: '<span class="math-display">f(x) = |x|</span>', en: '<span class="math-display">f(x) = |x|</span>' }, { ar: '<span class="math-display">f(x) = x³</span>', en: '<span class="math-display">f(x) = x³</span>' }], correct: 0, answer: { ar: 'x² - 5x + 6 = (x-2)(x-3) = 0، إذن x = 2 و x = 3 (تقاطعان)', en: 'x² - 5x + 6 = (x-2)(x-3) = 0, so x = 2 and x = 3 (two intercepts)' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 4: الدوال النسبية والجذرية', en: '🔹 Part 4: Rational & Radical Functions' },
+                questions: [
+                    { q: { ar: 'ما هو المجال للدالة <span class="math-display">f(x) = (x+4)/(x-2)</span>؟', en: 'What is the domain of <span class="math-display">f(x) = (x+4)/(x-2)</span>?' }, options: [{ ar: 'جميع الأعداد الحقيقية ما عدا <span class="math-display">x ≠ 2</span>', en: 'All real numbers except <span class="math-display">x ≠ 2</span>' }, { ar: 'جميع الأعداد الحقيقية', en: 'All real numbers' }, { ar: '<span class="math-display">x > 2</span>', en: '<span class="math-display">x > 2</span>' }, { ar: '<span class="math-display">x ≥ 2</span>', en: '<span class="math-display">x ≥ 2</span>' }], correct: 0, answer: { ar: 'المقام لا يمكن أن يكون صفراً، إذن x - 2 ≠ 0 → x ≠ 2', en: 'Denominator cannot be zero, so x - 2 ≠ 0 → x ≠ 2' } },
+                    { q: { ar: 'أوجد التقاطع مع المحور y للدالة <span class="math-display">f(x) = (x+4)/(x-2)</span>', en: 'Find the y-intercept of <span class="math-display">f(x) = (x+4)/(x-2)</span>' }, options: [{ ar: '<span class="math-display">(0, -2)</span>', en: '<span class="math-display">(0, -2)</span>' }, { ar: '<span class="math-display">(0, 2)</span>', en: '<span class="math-display">(0, 2)</span>' }, { ar: '<span class="math-display">(2, 0)</span>', en: '<span class="math-display">(2, 0)</span>' }, { ar: '<span class="math-display">(-2, 0)</span>', en: '<span class="math-display">(-2, 0)</span>' }], correct: 0, answer: { ar: 'عند x = 0: f(0) = (0+4)/(0-2) = 4/(-2) = -2', en: 'At x = 0: f(0) = (0+4)/(0-2) = 4/(-2) = -2' } },
+                    { q: { ar: 'ما هو الخط المقارب الرأسي للدالة <span class="math-display">g(x) = x²/(x+1)</span>؟', en: 'What is the vertical asymptote of <span class="math-display">g(x) = x²/(x+1)</span>?' }, options: [{ ar: '<span class="math-display">x = -1</span>', en: '<span class="math-display">x = -1</span>' }, { ar: '<span class="math-display">x = 1</span>', en: '<span class="math-display">x = 1</span>' }, { ar: '<span class="math-display">y = -1</span>', en: '<span class="math-display">y = -1</span>' }, { ar: 'لا يوجد خط مقارب', en: 'No asymptote' }], correct: 0, answer: { ar: 'المقام = 0 عندما x + 1 = 0 → x = -1', en: 'Denominator = 0 when x + 1 = 0 → x = -1' } },
+                    { q: { ar: 'أي من الدوال التالية لها خط مقارب أفقي؟', en: 'Which of the following functions has a horizontal asymptote?' }, options: [{ ar: '<span class="math-display">y = -10/x</span>', en: '<span class="math-display">y = -10/x</span>' }, { ar: '<span class="math-display">y = x²</span>', en: '<span class="math-display">y = x²</span>' }, { ar: '<span class="math-display">y = √x</span>', en: '<span class="math-display">y = √x</span>' }, { ar: '<span class="math-display">y = x³</span>', en: '<span class="math-display">y = x³</span>' }], correct: 0, answer: { ar: 'y = -10/x لها خط مقارب أفقي y = 0', en: 'y = -10/x has horizontal asymptote y = 0' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 5: التطبيقات العملية', en: '🔹 Part 5: Practical Applications' },
+                questions: [
+                    { q: { ar: 'إذا كانت دالة استهلاك المياه <span class="math-display">f(x) = 9.35x² - 12.7x + 541.7</span> حيث x عدد السنوات منذ 1977، فما الاستهلاك في 1994 (x = 17)؟', en: 'If water consumption is <span class="math-display">f(x) = 9.35x² - 12.7x + 541.7</span> where x is years since 1977, what is consumption in 1994 (x = 17)?' }, options: [{ ar: 'حوالي 3000 مليار لتر', en: 'About 3000 billion liters' }, { ar: 'حوالي 1000 مليار لتر', en: 'About 1000 billion liters' }, { ar: 'حوالي 5000 مليار لتر', en: 'About 5000 billion liters' }, { ar: 'حوالي 2000 مليار لتر', en: 'About 2000 billion liters' }], correct: 0, answer: { ar: 'f(17) = 9.35(289) - 12.7(17) + 541.7 ≈ 2702 - 216 + 542 ≈ 3028 مليار لتر', en: 'f(17) = 9.35(289) - 12.7(17) + 541.7 ≈ 2702 - 216 + 542 ≈ 3028 billion liters' } },
+                    { q: { ar: 'إذا كانت دالة تعداد السكان <span class="math-display">p(x) = -0.0013x⁴ + 0.0513x³ - 0.662x² + 4.128x + 35.75</span>، فما نوع هذه الدالة؟', en: 'If population is <span class="math-display">p(x) = -0.0013x⁴ + 0.0513x³ - 0.662x² + 4.128x + 35.75</span>, what type is it?' }, options: [{ ar: 'دالة كثيرة حدود من الدرجة الرابعة', en: 'Fourth degree polynomial' }, { ar: 'دالة تربيعية', en: 'Quadratic function' }, { ar: 'دالة تكعيبية', en: 'Cubic function' }, { ar: 'دالة خطية', en: 'Linear function' }], correct: 0, answer: { ar: 'أعلى أس هو 4، إذن دالة كثيرة حدود من الدرجة الرابعة', en: 'Highest exponent is 4, so it is a fourth degree polynomial' } },
+                    { q: { ar: 'في الرسم البياني للسرعة-الزمن، ماذا يمثل الميل؟', en: 'In a velocity-time graph, what does the slope represent?' }, options: [{ ar: 'التسارع', en: 'Acceleration' }, { ar: 'المسافة', en: 'Distance' }, { ar: 'السرعة', en: 'Velocity' }, { ar: 'الزمن', en: 'Time' }], correct: 0, answer: { ar: 'ميل رسم السرعة-الزمن = التسارع (a = Δv/Δt)', en: 'Slope of velocity-time graph = acceleration (a = Δv/Δt)' } },
+                    { q: { ar: 'إذا تضاعف تردد الموجة، ماذا يحدث لطولها الموجي؟', en: 'If wave frequency doubles, what happens to wavelength?' }, options: [{ ar: 'ينقص إلى النصف', en: 'Decreases to half' }, { ar: 'يتضاعف', en: 'Doubles' }, { ar: 'يبقى ثابتاً', en: 'Remains constant' }, { ar: 'يزيد 4 أضعاف', en: 'Increases 4 times' }], correct: 0, answer: { ar: 'السرعة = التردد × الطول الموجي، إذا كانت السرعة ثابتة وتضاعف التردد، ينقص الطول إلى النصف', en: 'Speed = frequency × wavelength, if speed constant and frequency doubles, wavelength halves' } }
+                ]
+            }
+        ]
+    },
+    continuity: {
+        id: 'continuity',
+        title: { ar: '📐 الاستمرارية وأنواع الانقطاع', en: '📐 Continuity & Discontinuity' },
+        subtitle: { ar: 'الدوال المستمرة، الانقطاع القابل للإزالة، الانقطاع اللانهائي، وانقطاع القفز', en: 'Continuous functions, removable, infinite, and jump discontinuities' },
+        description: { ar: 'مراجعة شاملة للاستمرارية وأنواع الانقطاع', en: 'Comprehensive review of continuity and types of discontinuities' },
+        duration: 3600,
+        color: 'from-emerald-500 to-teal-600',
+        icon: '📐',
+        formulae: [
+            { ar: '<strong>شروط الاستمرارية:</strong> f(c) معرفة، lim(x→c) f(x) موجود، lim(x→c) f(x) = f(c)', en: '<strong>Continuity Conditions:</strong> f(c) defined, lim(x→c) f(x) exists, lim(x→c) f(x) = f(c)' },
+            { ar: '<strong>انقطاع قابل للإزالة:</strong> lim(x→c) f(x) موجود لكن ≠ f(c)', en: '<strong>Removable Discontinuity:</strong> lim(x→c) f(x) exists but ≠ f(c)' },
+            { ar: '<strong>انقطاع لانهائي:</strong> lim(x→c) f(x) = ±∞', en: '<strong>Infinite Discontinuity:</strong> lim(x→c) f(x) = ±∞' },
+            { ar: '<strong>انقطاع قفز:</strong> lim(x→c⁻) f(x) ≠ lim(x→c⁺) f(x)', en: '<strong>Jump Discontinuity:</strong> lim(x→c⁻) f(x) ≠ lim(x→c⁺) f(x)' }
+        ],
+        sections: [
+            {
+                title: { ar: '🔹 الجزء 1: دوال الجذر التربيعي والاستمرارية', en: '🔹 Part 1: Square Root Functions & Continuity' },
+                questions: [
+                    { q: { ar: 'هل الدالة <span class="math-display">f(x) = √(x² - 4)</span> مستمرة عند <span class="math-display">x = -5</span>؟', en: 'Is <span class="math-display">f(x) = √(x² - 4)</span> continuous at <span class="math-display">x = -5</span>?' }, svg: svgGraphs.continuity_graph, options: [{ ar: 'نعم، مستمرة لأن <span class="math-display">f(-5) = √21</span> معرّف', en: 'Yes, continuous because <span class="math-display">f(-5) = √21</span> is defined' }, { ar: 'لا، غير مستمرة لأن المقام صفر', en: 'No, not continuous because denominator is zero' }, { ar: 'لا، غير مستمرة لأن الجذر سالب', en: 'No, not continuous because the square root is negative' }, { ar: 'لا يمكن التحديد', en: 'Cannot be determined' }], correct: 0, answer: { ar: 'عند x = -5: (-5)² - 4 = 21 > 0. الدالة معرّفة ومستمرة.', en: 'At x = -5: (-5)² - 4 = 21 > 0. The function is defined and continuous.' } },
+                    { q: { ar: 'هل الدالة <span class="math-display">f(x) = √(x + 5)</span> مستمرة عند <span class="math-display">x = 8</span>؟', en: 'Is <span class="math-display">f(x) = √(x + 5)</span> continuous at <span class="math-display">x = 8</span>?' }, options: [{ ar: 'نعم، مستمرة لأن <span class="math-display">8 + 5 = 13 > 0</span>', en: 'Yes, continuous because <span class="math-display">8 + 5 = 13 > 0</span>' }, { ar: 'لا، غير مستمرة', en: 'No, not continuous' }, { ar: 'مستمرة فقط من اليمين', en: 'Continuous only from the right' }, { ar: 'مستمرة فقط من اليسار', en: 'Continuous only from the left' }], correct: 0, answer: { ar: 'عند x = 8: 8 + 5 = 13 > 0. الدالة معرّفة ومستمرة.', en: 'At x = 8: 8 + 5 = 13 > 0. The function is defined and continuous.' } },
+                    { q: { ar: 'عند أي قيمة <span class="math-display">x</span> تكون الدالة <span class="math-display">f(x) = √(x² - 9)</span> غير معرّفة؟', en: 'At which value of <span class="math-display">x</span> is <span class="math-display">f(x) = √(x² - 9)</span> undefined?' }, options: [{ ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' }, { ar: '<span class="math-display">x = 4</span>', en: '<span class="math-display">x = 4</span>' }, { ar: '<span class="math-display">x = -5</span>', en: '<span class="math-display">x = -5</span>' }, { ar: '<span class="math-display">x = 10</span>', en: '<span class="math-display">x = 10</span>' }], correct: 0, answer: { ar: 'عند x = 0: 0² - 9 = -9 < 0. الجذر التربيعي لعدد سالب غير معرّف.', en: 'At x = 0: 0² - 9 = -9 < 0. Square root of negative is undefined.' } },
+                    { q: { ar: 'ما مجال الدالة <span class="math-display">f(x) = √(x - 3)</span>؟', en: 'What is the domain of <span class="math-display">f(x) = √(x - 3)</span>?' }, options: [{ ar: '<span class="math-display">x ≥ 3</span>', en: '<span class="math-display">x ≥ 3</span>' }, { ar: '<span class="math-display">x > 3</span>', en: '<span class="math-display">x > 3</span>' }, { ar: '<span class="math-display">x ≤ 3</span>', en: '<span class="math-display">x ≤ 3</span>' }, { ar: 'جميع الأعداد الحقيقية', en: 'All real numbers' }], correct: 0, answer: { ar: 'يجب أن يكون x - 3 ≥ 0، إذن x ≥ 3.', en: 'We need x - 3 ≥ 0, so x ≥ 3.' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 2: الانقطاع القابل للإزالة', en: '🔹 Part 2: Removable Discontinuity' },
+                questions: [
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">h(x) = (x² - 36)/(x - 6)</span> عند <span class="math-display">x = 6</span>؟', en: 'What type of discontinuity does <span class="math-display">h(x) = (x² - 36)/(x - 6)</span> have at <span class="math-display">x = 6</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة (Removable)', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي (Infinite)', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز (Jump)', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 0, answer: { ar: 'يمكن تبسيط الدالة إلى x + 6 (عندما x ≠ 6). النهاية موجودة (= 12) لكن الدالة غير معرّفة. هذا انقطاع قابل للإزالة.', en: 'The function simplifies to x + 6 (when x ≠ 6). The limit exists (= 12) but function is undefined. This is removable discontinuity.' } },
+                    { q: { ar: 'ما قيمة النهاية <span class="math-display">lim(x→6) (x² - 36)/(x - 6)</span>؟', en: 'What is <span class="math-display">lim(x→6) (x² - 36)/(x - 6)</span>?' }, options: [{ ar: '<span class="math-display">12</span>', en: '<span class="math-display">12</span>' }, { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' }, { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' }, { ar: 'غير موجودة', en: 'Does not exist' }], correct: 0, answer: { ar: '(x² - 36)/(x - 6) = (x-6)(x+6)/(x-6) = x + 6. عند x = 6: 6 + 6 = 12.', en: '(x² - 36)/(x - 6) = (x-6)(x+6)/(x-6) = x + 6. At x = 6: 6 + 6 = 12.' } },
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">g(x) = (x² - 25)/(x + 5)</span> عند <span class="math-display">x = -5</span>؟', en: 'What type of discontinuity does <span class="math-display">g(x) = (x² - 25)/(x + 5)</span> have at <span class="math-display">x = -5</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 0, answer: { ar: 'يمكن تبسيط الدالة إلى x - 5 (عندما x ≠ -5). النهاية = -10. انقطاع قابل للإزالة.', en: 'The function simplifies to x - 5 (when x ≠ -5). Limit = -10. Removable discontinuity.' } },
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">h(x) = (x - 4)/(x² - 5x + 4)</span> عند <span class="math-display">x = 4</span>؟', en: 'What type of discontinuity does <span class="math-display">h(x) = (x - 4)/(x² - 5x + 4)</span> have at <span class="math-display">x = 4</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 0, answer: { ar: 'x² - 5x + 4 = (x-1)(x-4). يمكن اختصار (x-4). النهاية عند x=4 هي 1/3. انقطاع قابل للإزالة.', en: 'x² - 5x + 4 = (x-1)(x-4). The (x-4) cancels. Limit at x=4 is 1/3. Removable discontinuity.' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 3: الانقطاع اللانهائي (الخطوط المقاربة)', en: '🔹 Part 3: Infinite Discontinuity (Asymptotes)' },
+                questions: [
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">g(x) = (2 - x)/(2 + x)</span> عند <span class="math-display">x = -2</span>؟', en: 'What type of discontinuity does <span class="math-display">g(x) = (2 - x)/(2 + x)</span> have at <span class="math-display">x = -2</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي (خط مقارب رأسي)', en: 'Infinite discontinuity (vertical asymptote)' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 1, answer: { ar: 'عند x = -2: المقام = 0 والبسط = 4 ≠ 0. لا يمكن الاختصار. النهاية → ±∞. انقطاع لانهائي.', en: 'At x = -2: denominator = 0 and numerator = 4 ≠ 0. Cannot cancel. Limit → ±∞. Infinite discontinuity.' } },
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">h(x) = (x - 4)/(x² - 5x + 4)</span> عند <span class="math-display">x = 1</span>؟', en: 'What type of discontinuity does <span class="math-display">h(x) = (x - 4)/(x² - 5x + 4)</span> have at <span class="math-display">x = 1</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 1, answer: { ar: 'عند x = 1: البسط = -3 ≠ 0 والمقام = 0. لا يمكن الاختصار. النهاية → ±∞.', en: 'At x = 1: numerator = -3 ≠ 0 and denominator = 0. Cannot cancel. Limit → ±∞.' } },
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">h(x) = (x - 6)/(x² - 6x)</span> عند <span class="math-display">x = 0</span>؟', en: 'What type of discontinuity does <span class="math-display">h(x) = (x - 6)/(x² - 6x)</span> have at <span class="math-display">x = 0</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 1, answer: { ar: 'x² - 6x = x(x-6). عند x = 0: البسط = -6 ≠ 0 والمقام = 0. انقطاع لانهائي.', en: 'x² - 6x = x(x-6). At x = 0: numerator = -6 ≠ 0 and denominator = 0. Infinite discontinuity.' } },
+                    { q: { ar: 'أين تقع الخطوط المقاربة الرأسية للدالة <span class="math-display">f(x) = (x+2)/((x-1)(x+3))</span>؟', en: 'Where are the vertical asymptotes of <span class="math-display">f(x) = (x+2)/((x-1)(x+3))</span>?' }, options: [{ ar: '<span class="math-display">x = 1</span> و <span class="math-display">x = -3</span>', en: '<span class="math-display">x = 1</span> and <span class="math-display">x = -3</span>' }, { ar: '<span class="math-display">x = -2</span> فقط', en: '<span class="math-display">x = -2</span> only' }, { ar: '<span class="math-display">x = 1</span> فقط', en: '<span class="math-display">x = 1</span> only' }, { ar: 'لا توجد خطوط مقاربة', en: 'No vertical asymptotes' }], correct: 0, answer: { ar: 'المقام = 0 عندما x = 1 أو x = -3. البسط ≠ 0 عند هاتين القيمتين. إذن خطان مقاربان.', en: 'Denominator = 0 when x = 1 or x = -3. Numerator ≠ 0 at these values. So two vertical asymptotes.' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 4: انقطاع القفز (الدوال متعددة القواعد)', en: '🔹 Part 4: Jump Discontinuity (Piecewise Functions)' },
+                questions: [
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">f(x) = {4x-1 if x≤-6; -x+2 if x>-6}</span> عند <span class="math-display">x = -6</span>؟', en: 'What type of discontinuity does <span class="math-display">f(x) = {4x-1 if x≤-6; -x+2 if x>-6}</span> have at <span class="math-display">x = -6</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز (Jump)', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 2, answer: { ar: 'النهاية اليسرى = 4(-6)-1 = -25. النهاية اليمنى = -(-6)+2 = 8. النهايتان مختلفتان لكن محدودتان. انقطاع قفز.', en: 'Left limit = 4(-6)-1 = -25. Right limit = -(-6)+2 = 8. Both limits exist but are different. Jump discontinuity.' } },
+                    { q: { ar: 'ما قيمة النهاية اليسرى <span class="math-display">lim(x→-6⁻) f(x)</span> للدالة <span class="math-display">f(x) = {4x-1 if x≤-6; -x+2 if x>-6}</span>؟', en: 'What is <span class="math-display">lim(x→-6⁻) f(x)</span> for <span class="math-display">f(x) = {4x-1 if x≤-6; -x+2 if x>-6}</span>?' }, options: [{ ar: '<span class="math-display">-25</span>', en: '<span class="math-display">-25</span>' }, { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' }, { ar: '<span class="math-display">-23</span>', en: '<span class="math-display">-23</span>' }, { ar: '<span class="math-display">26</span>', en: '<span class="math-display">26</span>' }], correct: 0, answer: { ar: 'من اليسار (x ≤ -6): f(x) = 4x - 1. عند x = -6: 4(-6) - 1 = -25.', en: 'From the left (x ≤ -6): f(x) = 4x - 1. At x = -6: 4(-6) - 1 = -25.' } },
+                    { q: { ar: 'ما نوع الانقطاع في <span class="math-display">f(x) = {x²-1 if x<-2; x-5 if x≥-2}</span> عند <span class="math-display">x = -2</span>؟', en: 'What type of discontinuity does <span class="math-display">f(x) = {x²-1 if x<-2; x-5 if x≥-2}</span> have at <span class="math-display">x = -2</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 2, answer: { ar: 'النهاية اليسرى = (-2)²-1 = 3. النهاية اليمنى = -2-5 = -7. النهايتان مختلفتان. انقطاع قفز.', en: 'Left limit = (-2)²-1 = 3. Right limit = -2-5 = -7. Both limits exist but are different. Jump discontinuity.' } },
+                    { q: { ar: 'لجعل الدالة <span class="math-display">f(x) = {x²-1 if x<-2; k if x≥-2}</span> مستمرة عند <span class="math-display">x = -2</span>، ما قيمة k؟', en: 'To make <span class="math-display">f(x) = {x²-1 if x<-2; k if x≥-2}</span> continuous at <span class="math-display">x = -2</span>, what is k?' }, options: [{ ar: '<span class="math-display">k = 3</span>', en: '<span class="math-display">k = 3</span>' }, { ar: '<span class="math-display">k = -7</span>', en: '<span class="math-display">k = -7</span>' }, { ar: '<span class="math-display">k = 5</span>', en: '<span class="math-display">k = 5</span>' }, { ar: '<span class="math-display">k = -3</span>', en: '<span class="math-display">k = -3</span>' }], correct: 0, answer: { ar: 'النهاية اليسرى = (-2)²-1 = 3. للاستمرارية: k = 3.', en: 'Left limit = (-2)²-1 = 3. For continuity: k = 3.' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 5: مسائل متنوعة على الاستمرارية', en: '🔹 Part 5: Mixed Continuity Problems' },
+                questions: [
+                    { q: { ar: 'أي من الدوال التالية مستمرة عند <span class="math-display">x = 5</span>؟', en: 'Which function is continuous at <span class="math-display">x = 5</span>?' }, options: [{ ar: '<span class="math-display">g(x) = (x² - 25)/(x + 5)</span>', en: '<span class="math-display">g(x) = (x² - 25)/(x + 5)</span>' }, { ar: '<span class="math-display">g(x) = (x² - 25)/(x - 5)</span>', en: '<span class="math-display">g(x) = (x² - 25)/(x - 5)</span>' }, { ar: '<span class="math-display">g(x) = 1/(x - 5)</span>', en: '<span class="math-display">g(x) = 1/(x - 5)</span>' }, { ar: '<span class="math-display">g(x) = √(x - 6)</span>', en: '<span class="math-display">g(x) = √(x - 6)</span>' }], correct: 0, answer: { ar: 'عند x = 5: (25-25)/(5+5) = 0/10 = 0. الدالة معرّفة ومستمرة.', en: 'At x = 5: (25-25)/(5+5) = 0/10 = 0. Function is defined and continuous.' } },
+                    { q: { ar: 'ما الشرط اللازم لكي تكون الدالة <span class="math-display">f(x)</span> مستمرة عند <span class="math-display">x = c</span>؟', en: 'What condition is required for <span class="math-display">f(x)</span> to be continuous at <span class="math-display">x = c</span>?' }, options: [{ ar: '<span class="math-display">lim(x→c) f(x) = f(c)</span>', en: '<span class="math-display">lim(x→c) f(x) = f(c)</span>' }, { ar: '<span class="math-display">f(c) = 0</span>', en: '<span class="math-display">f(c) = 0</span>' }, { ar: '<span class="math-display">f\'(c) = 0</span>', en: '<span class="math-display">f\'(c) = 0</span>' }, { ar: '<span class="math-display">f(c) = c</span>', en: '<span class="math-display">f(c) = c</span>' }], correct: 0, answer: { ar: 'الشرط الأساسي للاستمرارية: نهاية الدالة عند c تساوي قيمة الدالة عند c.', en: 'The basic condition for continuity: limit of f at c equals f(c).' } },
+                    { q: { ar: 'إذا كانت <span class="math-display">lim(x→c⁻) f(x) = 3</span> و <span class="math-display">lim(x→c⁺) f(x) = 3</span> و <span class="math-display">f(c) = 5</span>، فما نوع الانقطاع؟', en: 'If <span class="math-display">lim(x→c⁻) f(x) = 3</span>, <span class="math-display">lim(x→c⁺) f(x) = 3</span>, and <span class="math-display">f(c) = 5</span>, what type of discontinuity?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 0, answer: { ar: 'النهاية موجودة (= 3) لكنها لا تساوي f(c) = 5. هذا انقطاع قابل للإزالة (يمكن "إصلاحه" بتغيير قيمة f(c)).', en: 'Limit exists (= 3) but ≠ f(c) = 5. This is removable discontinuity (can be "fixed" by changing f(c)).' } },
+                    { q: { ar: 'أي نوع من الانقطاع يحدث عندما <span class="math-display">lim(x→c) f(x) = ±∞</span>؟', en: 'What type of discontinuity occurs when <span class="math-display">lim(x→c) f(x) = ±∞</span>?' }, options: [{ ar: 'انقطاع قابل للإزالة', en: 'Removable discontinuity' }, { ar: 'انقطاع لانهائي', en: 'Infinite discontinuity' }, { ar: 'انقطاع قفز', en: 'Jump discontinuity' }, { ar: 'الدالة مستمرة', en: 'The function is continuous' }], correct: 1, answer: { ar: 'عندما تؤول النهاية إلى ±∞، يوجد خط مقارب رأسي وهذا يُسمى انقطاع لانهائي.', en: 'When the limit approaches ±∞, there is a vertical asymptote. This is called infinite discontinuity.' } }
+                ]
+            }
+        ]
+    },
+    graphical_analysis: {
+        id: 'graphical_analysis',
+        title: { ar: '📊 التحليل البياني للدوال', en: '📊 Graphical Analysis of Functions' },
+        subtitle: { ar: 'فترات التزايد والتناقص، متوسط معدل التغير، القيم القصوى المحلية والمطلقة', en: 'Increasing/Decreasing intervals, Average Rate of Change, Local & Absolute Extrema' },
+        description: { ar: 'مراجعة شاملة للتحليل البياني للدوال', en: 'Comprehensive review of graphical analysis of functions' },
+        duration: 3600,
+        color: 'from-purple-500 to-pink-600',
+        icon: '📊',
+        formulae: [
+            { ar: '<strong>متوسط معدل التغير:</strong> ARC = [f(b) - f(a)] / (b - a)', en: '<strong>Average Rate of Change:</strong> ARC = [f(b) - f(a)] / (b - a)' },
+            { ar: '<strong>فترة التزايد:</strong> f\'(x) > 0', en: '<strong>Increasing Interval:</strong> f\'(x) > 0' },
+            { ar: '<strong>فترة التناقص:</strong> f\'(x) < 0', en: '<strong>Decreasing Interval:</strong> f\'(x) < 0' },
+            { ar: '<strong>القيم الحرجة:</strong> f\'(x) = 0', en: '<strong>Critical Values:</strong> f\'(x) = 0' }
+        ],
+        sections: [
+            {
+                title: { ar: '🔹 الجزء 1: فترات التزايد والتناقص', en: '🔹 Part 1: Increasing & Decreasing Intervals' },
+                questions: [
+                    { q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x³ - x² - 2x + 3</span>، فترات التزايد هي:', en: 'From the graph of <span class="math-display">f(x) = x³ - x² - 2x + 3</span>, the increasing intervals are:' }, svg: svgGraphs.arc_graph, options: [{ ar: '<span class="math-display">(-∞, -0.7) و (1.5, ∞)</span>', en: '<span class="math-display">(-∞, -0.7) and (1.5, ∞)</span>' }, { ar: '<span class="math-display">(-0.7, 1.5)</span>', en: '<span class="math-display">(-0.7, 1.5)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">(-∞, 0) و (0, ∞)</span>', en: '<span class="math-display">(-∞, 0) and (0, ∞)</span>' }], correct: 0, answer: { ar: 'الدالة متزايدة عندما يكون الميل موجباً: (-∞, -0.7) و (1.5, ∞)', en: 'Function is increasing when slope is positive: (-∞, -0.7) and (1.5, ∞)' } },
+                    { q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = -x³ - 4x² + 2</span>، فترة التناقص هي:', en: 'From the graph of <span class="math-display">f(x) = -x³ - 4x² + 2</span>, the decreasing interval is:' }, options: [{ ar: '<span class="math-display">(-∞, -2.67) و (0, ∞)</span>', en: '<span class="math-display">(-∞, -2.67) and (0, ∞)</span>' }, { ar: '<span class="math-display">(-2.67, 0)</span>', en: '<span class="math-display">(-2.67, 0)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">(0, ∞) فقط</span>', en: '<span class="math-display">(0, ∞) only</span>' }], correct: 0, answer: { ar: 'الدالة متناقصة عندما يكون الميل سالباً: (-∞, -2.67) و (0, ∞)', en: 'Function is decreasing when slope is negative: (-∞, -2.67) and (0, ∞)' } },
+                    { q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x/(x-2)</span>، فترات التزايد هي:', en: 'From the graph of <span class="math-display">f(x) = x/(x-2)</span>, the increasing intervals are:' }, options: [{ ar: '<span class="math-display">(-∞, 2) و (2, ∞)</span>', en: '<span class="math-display">(-∞, 2) and (2, ∞)</span>' }, { ar: '<span class="math-display">(-∞, 0) و (0, ∞)</span>', en: '<span class="math-display">(-∞, 0) and (0, ∞)</span>' }, { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }, { ar: '<span class="math-display">(2, ∞) فقط</span>', en: '<span class="math-display">(2, ∞) only</span>' }], correct: 0, answer: { ar: 'الدالة متزايدة على كل مجالها ما عدا عند x = 2 (خط تقارب رأسي)', en: 'Function is increasing on its entire domain except at x = 2 (vertical asymptote)' } },
+                    { q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x²/(x+3)</span>، فترات التناقص هي:', en: 'From the graph of <span class="math-display">f(x) = x²/(x+3)</span>, the decreasing intervals are:' }, options: [{ ar: '<span class="math-display">(-6, -3) و (-3, 0)</span>', en: '<span class="math-display">(-6, -3) and (-3, 0)</span>' }, { ar: '<span class="math-display">(-∞, -6) و (0, ∞)</span>', en: '<span class="math-display">(-∞, -6) and (0, ∞)</span>' }, { ar: '<span class="math-display">(-∞, -3)</span>', en: '<span class="math-display">(-∞, -3)</span>' }, { ar: '<span class="math-display">(-3, ∞)</span>', en: '<span class="math-display">(-3, ∞)</span>' }], correct: 0, answer: { ar: 'الدالة متناقصة بين القيمتين الحرجتين: (-6, -3) و (-3, 0)', en: 'Function is decreasing between critical values: (-6, -3) and (-3, 0)' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 2: متوسط معدل التغير', en: '🔹 Part 2: Average Rate of Change' },
+                questions: [
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = x² + 3x - 4</span> على الفترة <span class="math-display">[-1, 3]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = x² + 3x - 4</span> on the interval <span class="math-display">[-1, 3]</span>' }, options: [{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }, { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' }, { ar: '<span class="math-display">20</span>', en: '<span class="math-display">20</span>' }, { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }], correct: 0, answer: { ar: 'ARC = [f(3) - f(-1)] / [3 - (-1)] = [14 - (-6)] / 4 = 20/4 = 5', en: 'ARC = [f(3) - f(-1)] / [3 - (-1)] = [14 - (-6)] / 4 = 20/4 = 5' } },
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -8x + 2</span> على الفترة <span class="math-display">[4, 8]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -8x + 2</span> on the interval <span class="math-display">[4, 8]</span>' }, options: [{ ar: '<span class="math-display">-8</span>', en: '<span class="math-display">-8</span>' }, { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' }, { ar: '<span class="math-display">-32</span>', en: '<span class="math-display">-32</span>' }, { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }], correct: 0, answer: { ar: 'ARC = [f(8) - f(4)] / [8 - 4] = [-62 - (-30)] / 4 = -32/4 = -8', en: 'ARC = [f(8) - f(4)] / [8 - 4] = [-62 - (-30)] / 4 = -32/4 = -8' } },
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 2x² + 6</span> على الفترة <span class="math-display">[2, 6]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 2x² + 6</span> on the interval <span class="math-display">[2, 6]</span>' }, options: [{ ar: '<span class="math-display">16</span>', en: '<span class="math-display">16</span>' }, { ar: '<span class="math-display">64</span>', en: '<span class="math-display">64</span>' }, { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }, { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' }], correct: 0, answer: { ar: 'ARC = [f(6) - f(2)] / [6 - 2] = [78 - 14] / 4 = 64/4 = 16', en: 'ARC = [f(6) - f(2)] / [6 - 2] = [78 - 14] / 4 = 64/4 = 16' } },
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -4x² + 2x - 8</span> على الفترة <span class="math-display">[-2, 3]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -4x² + 2x - 8</span> on the interval <span class="math-display">[-2, 3]</span>' }, options: [{ ar: '<span class="math-display">-2</span>', en: '<span class="math-display">-2</span>' }, { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' }, { ar: '<span class="math-display">-10</span>', en: '<span class="math-display">-10</span>' }, { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }], correct: 0, answer: { ar: 'ARC = [f(3) - f(-2)] / [3 - (-2)] = [-38 - (-28)] / 5 = -10/5 = -2', en: 'ARC = [f(3) - f(-2)] / [3 - (-2)] = [-38 - (-28)] / 5 = -10/5 = -2' } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 3: القيم القصوى المحلية', en: '🔹 Part 3: Local Extrema' },
+                questions: [
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = 3x³ - 6x² + 8</span>', en: 'Find the local extrema of <span class="math-display">f(x) = 3x³ - 6x² + 8</span>' }, options: [{ ar: '<span class="math-display">عظمى محلية عند x=0: f(0)=8، صغرى محلية عند x≈1.3: f(1.3)≈4.4</span>', en: '<span class="math-display">Local max at x=0: f(0)=8, Local min at x≈1.3: f(1.3)≈4.4</span>' }, { ar: '<span class="math-display">عظمى محلية عند x=1.3، صغرى محلية عند x=0</span>', en: '<span class="math-display">Local max at x=1.3, Local min at x=0</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "f'(x) = 9x² - 12x = 3x(3x-4) = 0 → x=0 أو x=4/3≈1.3. عند x=0: عظمى محلية، عند x≈1.3: صغرى محلية", en: "f'(x) = 9x² - 12x = 3x(3x-4) = 0 → x=0 or x=4/3≈1.3. At x=0: local max, at x≈1.3: local min" } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = -2x³ + 7x - 5</span>', en: 'Find the local extrema of <span class="math-display">g(x) = -2x³ + 7x - 5</span>' }, options: [{ ar: '<span class="math-display">صغرى محلية عند x≈-1.1: g(-1.1)≈-10.0، عظمى محلية عند x≈1.1: g(1.1)≈0.0</span>', en: '<span class="math-display">Local min at x≈-1.1: g(-1.1)≈-10.0, Local max at x≈1.1: g(1.1)≈0.0</span>' }, { ar: '<span class="math-display">عظمى محلية عند x≈-1.1، صغرى محلية عند x≈1.1</span>', en: '<span class="math-display">Local max at x≈-1.1, Local min at x≈1.1</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "g'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. عند x≈-1.1: صغرى محلية، عند x≈1.1: عظمى محلية", en: "g'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. At x≈-1.1: local min, at x≈1.1: local max" } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>', en: 'Find the local extrema of <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>' }, options: [{ ar: '<span class="math-display">عظمى محلية عند x≈2.3: f(2.3)≈6.5، نقطة انعطاف عند x=0</span>', en: '<span class="math-display">Local max at x≈2.3: f(2.3)≈6.5, Inflection point at x=0</span>' }, { ar: '<span class="math-display">عظمى محلية عند x=0، صغرى محلية عند x≈2.3</span>', en: '<span class="math-display">Local max at x=0, Local min at x≈2.3</span>' }, { ar: '<span class="math-display">صغرى محلية فقط عند x=0</span>', en: '<span class="math-display">Local min only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "f'(x) = -4x³ + 9x² = x²(-4x+9) = 0 → x=0 أو x=2.25. عند x=0: نقطة انعطاف، عند x≈2.3: عظمى محلية", en: "f'(x) = -4x³ + 9x² = x²(-4x+9) = 0 → x=0 or x=2.25. At x=0: inflection point, at x≈2.3: local max" } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = x⁷ + 6x² - 4</span>', en: 'Find the local extrema of <span class="math-display">g(x) = x⁷ + 6x² - 4</span>' }, options: [{ ar: '<span class="math-display">عظمى محلية عند x≈-1.1: g(-1.1)≈-1.5، صغرى محلية عند x=0: g(0)=-4</span>', en: '<span class="math-display">Local max at x≈-1.1: g(-1.1)≈-1.5, Local min at x=0: g(0)=-4</span>' }, { ar: '<span class="math-display">صغرى محلية عند x≈-1.1، عظمى محلية عند x=0</span>', en: '<span class="math-display">Local min at x≈-1.1, Local max at x=0</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "g'(x) = 7x⁶ + 12x = x(7x⁵+12) = 0 → x=0 أو x≈-1.1. عند x≈-1.1: عظمى محلية، عند x=0: صغرى محلية", en: "g'(x) = 7x⁶ + 12x = x(7x⁵+12) = 0 → x=0 or x≈-1.1. At x≈-1.1: local max, at x=0: local min" } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 4: تطبيقات متقدمة', en: '🔹 Part 4: Advanced Applications' },
+                questions: [
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -5x³ + 4x - 6</span> على الفترة <span class="math-display">[-1, 5]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -5x³ + 4x - 6</span> on the interval <span class="math-display">[-1, 5]</span>' }, options: [{ ar: '<span class="math-display">-101</span>', en: '<span class="math-display">-101</span>' }, { ar: '<span class="math-display">101</span>', en: '<span class="math-display">101</span>' }, { ar: '<span class="math-display">-606</span>', en: '<span class="math-display">-606</span>' }, { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' }], correct: 0, answer: { ar: 'ARC = [f(5) - f(-1)] / [5 - (-1)] = [-611 - (-5)] / 6 = -606/6 = -101', en: 'ARC = [f(5) - f(-1)] / [5 - (-1)] = [-611 - (-5)] / 6 = -606/6 = -101' } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>', en: 'Find the local extrema of <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>' }, options: [{ ar: '<span class="math-display">عظمى محلية عند x≈-1.4: f(-1.4)≈4.1، صغرى محلية عند x≈1.4: f(1.4)≈-8.1</span>', en: '<span class="math-display">Local max at x≈-1.4: f(-1.4)≈4.1, Local min at x≈1.4: f(1.4)≈-8.1</span>' }, { ar: '<span class="math-display">صغرى محلية عند x≈-1.4، عظمى محلية عند x≈1.4</span>', en: '<span class="math-display">Local min at x≈-1.4, Local max at x≈1.4</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "f'(x) = 5x⁴ - 6x² - 6 = 0 → x² = (6+√156)/10 ≈ 1.85 → x ≈ ±1.4. عند x≈-1.4: عظمى محلية، عند x≈1.4: صغرى محلية", en: "f'(x) = 5x⁴ - 6x² - 6 = 0 → x² = (6+√156)/10 ≈ 1.85 → x ≈ ±1.4. At x≈-1.4: local max, at x≈1.4: local min" } },
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = x⁴ + 3x - 12</span> على الفترة <span class="math-display">[-5, -1]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = x⁴ + 3x - 12</span> on the interval <span class="math-display">[-5, -1]</span>' }, options: [{ ar: '<span class="math-display">-153</span>', en: '<span class="math-display">-153</span>' }, { ar: '<span class="math-display">153</span>', en: '<span class="math-display">153</span>' }, { ar: '<span class="math-display">-612</span>', en: '<span class="math-display">-612</span>' }, { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }], correct: 0, answer: { ar: 'ARC = [f(-1) - f(-5)] / [-1 - (-5)] = [-14 - 598] / 4 = -612/4 = -153', en: 'ARC = [f(-1) - f(-5)] / [-1 - (-5)] = [-14 - 598] / 4 = -612/4 = -153' } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span>', en: 'Find the local extrema of <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span>' }, options: [{ ar: '<span class="math-display">صغرى محلية عند x≈-1.7: g(-1.7)≈-13.5، عظمى محلية عند x≈-0.4: g(-0.4)≈-0.3، صغرى محلية عند x≈1.6: g(1.6)≈-10.2</span>', en: '<span class="math-display">Local min at x≈-1.7: g(-1.7)≈-13.5, Local max at x≈-0.4: g(-0.4)≈-0.3, Local min at x≈1.6: g(1.6)≈-10.2</span>' }, { ar: '<span class="math-display">عظمى محلية عند x≈-1.7، صغرى محلية عند x≈-0.4، عظمى محلية عند x≈1.6</span>', en: '<span class="math-display">Local max at x≈-1.7, Local min at x≈-0.4, Local max at x≈1.6</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "g'(x) = 6x⁵ - 16x³ + 1 = 0 → x ≈ -1.7, -0.4, 1.6. عند x≈-1.7: صغرى محلية، عند x≈-0.4: عظمى محلية، عند x≈1.6: صغرى محلية", en: "g'(x) = 6x⁵ - 16x³ + 1 = 0 → x ≈ -1.7, -0.4, 1.6. At x≈-1.7: local min, at x≈-0.4: local max, at x≈1.6: local min" } }
+                ]
+            },
+            {
+                title: { ar: '🔹 الجزء 5: مسائل شاملة', en: '🔹 Part 5: Comprehensive Problems' },
+                questions: [
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 5x² + 6x - 9</span> على الفترة <span class="math-display">[3, 6]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 5x² + 6x - 9</span> on the interval <span class="math-display">[3, 6]</span>' }, options: [{ ar: '<span class="math-display">51</span>', en: '<span class="math-display">51</span>' }, { ar: '<span class="math-display">153</span>', en: '<span class="math-display">153</span>' }, { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' }, { ar: '<span class="math-display">54</span>', en: '<span class="math-display">54</span>' }], correct: 0, answer: { ar: 'ARC = [f(6) - f(3)] / [6 - 3] = [207 - 54] / 3 = 153/3 = 51', en: 'ARC = [f(6) - f(3)] / [6 - 3] = [207 - 54] / 3 = 153/3 = 51' } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = -x⁵ + 3x² + x - 1</span>', en: 'Find the local extrema of <span class="math-display">f(x) = -x⁵ + 3x² + x - 1</span>' }, options: [{ ar: '<span class="math-display">صغرى محلية عند x≈-0.2: f(-0.2)≈-1.3، عظمى محلية عند x≈1.1: f(1.1)≈2.0</span>', en: '<span class="math-display">Local min at x≈-0.2: f(-0.2)≈-1.3, Local max at x≈1.1: f(1.1)≈2.0</span>' }, { ar: '<span class="math-display">عظمى محلية عند x≈-0.2، صغرى محلية عند x≈1.1</span>', en: '<span class="math-display">Local max at x≈-0.2, Local min at x≈1.1</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "f'(x) = -5x⁴ + 6x + 1 = 0 → x ≈ -0.2, 1.1. عند x≈-0.2: صغرى محلية، عند x≈1.1: عظمى محلية", en: "f'(x) = -5x⁴ + 6x + 1 = 0 → x ≈ -0.2, 1.1. At x≈-0.2: local min, at x≈1.1: local max" } },
+                    { q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 2x² + 6x - 1</span> على الفترة <span class="math-display">[5, 9]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 2x² + 6x - 1</span> on the interval <span class="math-display">[5, 9]</span>' }, options: [{ ar: '<span class="math-display">34</span>', en: '<span class="math-display">34</span>' }, { ar: '<span class="math-display">136</span>', en: '<span class="math-display">136</span>' }, { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }, { ar: '<span class="math-display">79</span>', en: '<span class="math-display">79</span>' }], correct: 0, answer: { ar: 'ARC = [f(9) - f(5)] / [9 - 5] = [215 - 79] / 4 = 136/4 = 34', en: 'ARC = [f(9) - f(5)] / [9 - 5] = [215 - 79] / 4 = 136/4 = 34' } },
+                    { q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>', en: 'Find the local extrema of <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>' }, options: [{ ar: '<span class="math-display">صغرى محلية عند x≈-3.0: f(-3.0)≈-15.2، عظمى محلية عند x≈0.3: f(0.3)≈-0.1، صغرى محلية عند x≈2.5: f(2.5)≈1.8، عظمى محلية عند x≈5.2: f(5.2)≈3.5</span>', en: '<span class="math-display">Local min at x≈-3.0: f(-3.0)≈-15.2, Local max at x≈0.3: f(0.3)≈-0.1, Local min at x≈2.5: f(2.5)≈1.8, Local max at x≈5.2: f(5.2)≈3.5</span>' }, { ar: '<span class="math-display">عظمى محلية عند x≈-3.0، صغرى محلية عند x≈0.3، عظمى محلية عند x≈2.5، صغرى محلية عند x≈5.2</span>', en: '<span class="math-display">Local max at x≈-3.0, Local min at x≈0.3, Local max at x≈2.5, Local min at x≈5.2</span>' }, { ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' }, { ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }], correct: 0, answer: { ar: "f'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. عند x≈-3.0: صغرى محلية، عند x≈0.3: عظمى محلية، عند x≈2.5: صغرى محلية، عند x≈5.2: عظمى محلية", en: "f'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. At x≈-3.0: local min, at x≈0.3: local max, at x≈2.5: local min, at x≈5.2: local max" } }
+                ]
+            }
+        ]
+    }
+};
+
+// ==================== Utility Functions ====================
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState() {
+    try {
+        const state = {
+            currentExam: currentExam ? currentExam.id : null,
+            seed: currentSeed,
+            lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    const inputs = document.querySelectorAll('#exam-content input[type="radio"]:checked');
+    inputs.forEach(input => {
+        const match = input.name.match(/q(\d+)/);
+        if (match) answers[match[1]] = input.value;
+    });
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector(`input[name="q${idx}"][value="${val}"]`);
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+    }
+}
+
+// ==================== Dashboard Functions ====================
+function renderDashboard() {
+    const grid = document.getElementById('topics-grid');
+    grid.innerHTML = '';
+    
+    Object.values(EXAMS_DB).forEach(exam => {
+        const card = document.createElement('div');
+        card.className = `topic-card bg-gradient-to-br ${exam.color} text-white p-6 rounded-2xl shadow-lg`;
+        card.onclick = () => loadExam(exam.id);
+        card.innerHTML = `
+            <div class="text-5xl mb-3">${exam.icon}</div>
+            <h3 class="text-xl font-bold mb-2">${exam.title[currentLang]}</h3>
+            <p class="text-sm opacity-90 mb-1">${exam.subtitle[currentLang]}</p>
+            <p class="text-xs opacity-75 mb-3">${exam.description[currentLang]}</p>
+            <div class="flex justify-between items-center text-xs">
+                <span>⏱️ ${Math.floor(exam.duration/60)} ${currentLang === 'ar' ? 'دقيقة' : 'min'}</span>
+                <span>📝 ${exam.sections.reduce((sum, s) => sum + s.questions.length, 0)} ${currentLang === 'ar' ? 'سؤال' : 'questions'}</span>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// ==================== Exam Functions ====================
+function loadExam(examId) {
+    currentExam = EXAMS_DB[examId];
+    if (!currentExam) return;
+    
+    currentSeed = Date.now();
+    answersVisible = false;
+    timeRemaining = currentExam.duration;
+    
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('exam-container').style.display = 'block';
+    document.getElementById('exam-container').classList.add('fade-in');
+    
+    document.getElementById('exam-title').textContent = currentExam.title[currentLang];
+    document.getElementById('exam-subtitle').textContent = currentExam.subtitle[currentLang];
+    document.getElementById('exam-description').textContent = currentExam.description[currentLang];
+    document.getElementById('exam-info').textContent = currentLang === 'ar' 
+        ? `💾 يتم حفظ تقدمك تلقائياً - ${currentExam.sections.reduce((s,sec)=>s+sec.questions.length,0)} سؤالاً في ${currentExam.sections.length} أقسام`
+        : `💾 Auto-saved - ${currentExam.sections.reduce((s,sec)=>s+sec.questions.length,0)} questions in ${currentExam.sections.length} sections`;
+    document.getElementById('exam-badge').textContent = currentExam.icon;
+    
+    const formulaBox = document.getElementById('formula-boxes');
+    formulaBox.innerHTML = currentExam.formulae.map(f => 
+        `<div class="formula-box" style="color: #0f766e;">${f[currentLang]}</div>`
+    ).join('');
+    
+    prepareShuffledExam();
+    renderExam();
+    startTimer();
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(currentExam.sections));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    
+    examData.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    const isRTL = currentLang === 'ar';
+    
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.forEach((section, secIdx) => {
+        html += `<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-teal-100 fade-in">
+            <h2 class="text-xl font-bold mb-4 text-teal-700">${section.title[currentLang]}</h2>
+            <ol class="space-y-4 text-sm">`;
+        
+        section.questions.forEach((q) => {
+            const bs = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
+            html += `<li class="${bs} border-teal-400 py-2" id="q-${globalIdx}">
+                <strong>${globalIdx + 1}.</strong> ${q.q[currentLang]}<br>`;
+            
+            if (q.svg) html += `<div class="graph-container">${q.svg}</div>`;
+            
+            q.options.forEach((opt, oIdx) => {
+                const rs = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
+                html += `<label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'} hover:bg-teal-50 rounded-lg p-1 transition">
+                    <input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${rs}">
+                    ${lbl.option[oIdx]}) ${opt[currentLang]}</label>`;
+            });
+            
+            html += `<div class="answer-box text-green-700 mt-2 font-medium ${answersVisible ? '' : 'hidden'} bg-green-50 rounded-lg p-2">
+                ${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}</div></li>`;
+            globalIdx++;
+        });
+        
+        html += `</ol></section>`;
+    });
+    
+    container.innerHTML = html;
+    const saved = loadState();
+    if (saved && saved.answers) restoreAnswers(saved.answers);
+}
+
+function goToDashboard() {
+    if (timerInterval) clearInterval(timerInterval);
+    document.getElementById('exam-container').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    currentExam = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function reshuffleExam() {
+    if (!currentExam) return;
+    const msg = currentLang === 'ar' ? '🔄 أسئلة جديدة ومسح الإجابات. متأكد؟' : '🔄 New questions and clear answers. Sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now();
+        timeRemaining = currentExam.duration;
+        answersVisible = false;
+        prepareShuffledExam();
+        renderExam();
+        saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    
+    document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+        el.textContent = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    });
+    
+    if (currentExam) {
+        document.getElementById('exam-title').textContent = currentExam.title[currentLang];
+        document.getElementById('exam-subtitle').textContent = currentExam.subtitle[currentLang];
+        document.getElementById('exam-description').textContent = currentExam.description[currentLang];
+        document.getElementById('exam-info').textContent = currentLang === 'ar' 
+            ? `💾 يتم حفظ تقدمك تلقائياً - ${currentExam.sections.reduce((s,sec)=>s+sec.questions.length,0)} سؤالاً في ${currentExam.sections.length} أقسام`
+            : `💾 Auto-saved - ${currentExam.sections.reduce((s,sec)=>s+sec.questions.length,0)} questions in ${currentExam.sections.length} sections`;
+        
+        const formulaBox = document.getElementById('formula-boxes');
+        formulaBox.innerHTML = currentExam.formulae.map(f => 
+            `<div class="formula-box" style="color: #0f766e;">${f[currentLang]}</div>`
+        ).join('');
+        
+        renderExam();
+    } else {
+        renderDashboard();
+    }
+    saveState();
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState();
+        if (timeRemaining <= 300) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState();
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const totalQuestions = currentExam.sections.reduce((s, sec) => s + sec.questions.length, 0);
+    const sectionScores = new Array(currentExam.sections.length).fill(0);
+    
+    let globalIdx = 0;
+    currentExam.sections.forEach((section, secIdx) => {
+        section.questions.forEach(() => {
+            const sel = document.querySelector(`input[name="q${globalIdx}"]:checked`);
+            const li = document.getElementById(`q-${globalIdx}`);
+            if (li) {
+                if (sel && sel.value === correctAnswersMap[globalIdx]) {
+                    correctCount++;
+                    li.classList.add('correct');
+                    li.classList.remove('incorrect');
+                    sectionScores[secIdx]++;
+                } else {
+                    li.classList.add('incorrect');
+                    li.classList.remove('correct');
+                }
+            }
+            globalIdx++;
+        });
+    });
+    
+    const score = Math.round((correctCount / totalQuestions) * 100);
+    document.getElementById('res-total').textContent = `${score} / 100`;
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    currentExam.sections.forEach((s, idx) => {
+        pc.innerHTML += `<div class="flex justify-between items-center"><span class="text-gray-700">${s.title[currentLang]}</span><span class="font-bold text-teal-700">${sectionScores[idx]}/${s.questions.length}</span></div>`;
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = `${score}%`;
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '';
+    let globalIdx = 0;
+    currentExam.sections.forEach((section) => {
+        section.questions.forEach((q) => {
+            const sel = document.querySelector(`input[name="q${globalIdx}"]:checked`);
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            const studentAns = sv ? q.options[sv.charCodeAt(0)-97][currentLang] : (currentLang === 'ar' ? 'لم يجب' : 'No answer');
+            const correctAns = q.options[q.correct][currentLang];
+            
+            questionsHTML += `<tr style="background:${ic ? '#f0fdf4' : '#fef2f2'};">
+                <td style="padding:8px;border:1px solid #e5e7eb;text-align:center;">${globalIdx+1}</td>
+                <td style="padding:8px;border:1px solid #e5e7eb;">${q.q[currentLang]}</td>
+                <td style="padding:8px;border:1px solid #e5e7eb;color:${ic ? '#059669' : '#dc2626'};">${studentAns}</td>
+                <td style="padding:8px;border:1px solid #e5e7eb;color:#059669;">${correctAns}</td>
+                <td style="padding:8px;border:1px solid #e5e7eb;text-align:center;">${ic ? '✅' : '❌'}</td>
+            </tr>`;
+            globalIdx++;
+        });
+    });
+    
+    const answersHTML = `<div style="font-family:'Segoe UI',Tahoma,Arial;direction:${currentLang==='ar'?'rtl':'ltr'};">
+        <div style="background:linear-gradient(135deg,#0d9488,#0f766e);color:white;padding:20px;border-radius:10px 10px 0 0;text-align:center;">
+            <h2 style="margin:0;">${currentExam.title[currentLang]} - ${currentLang === 'ar' ? 'نتيجة المراجعة' : 'Review Result'}</h2>
+        </div>
+        <div style="background:#f0fdfa;padding:15px;">
+            <table style="width:100%;"><tr>
+                <td style="padding:8px;font-weight:bold;">${currentLang === 'ar' ? 'الاسم:' : 'Name:'}</td><td>${name}</td>
+                <td style="padding:8px;font-weight:bold;">${currentLang === 'ar' ? 'الشعبة:' : 'Class:'}</td><td>${studentClass}</td>
+            </tr><tr>
+                <td style="padding:8px;font-weight:bold;">${currentLang === 'ar' ? 'التاريخ:' : 'Date:'}</td><td>${date}</td>
+                <td style="padding:8px;font-weight:bold;">${currentLang === 'ar' ? 'التقدير:' : 'Grade:'}</td><td>${badge}</td>
+            </tr></table>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:15px;">
+            <thead><tr style="background:#0d9488;color:white;">
+                <th style="padding:8px;border:1px solid #e5e7eb;">#</th>
+                <th style="padding:8px;border:1px solid #e5e7eb;">${currentLang === 'ar' ? 'السؤال' : 'Question'}</th>
+                <th style="padding:8px;border:1px solid #e5e7eb;">${currentLang === 'ar' ? 'إجابة الطالب' : 'Student'}</th>
+                <th style="padding:8px;border:1px solid #e5e7eb;">${currentLang === 'ar' ? 'الصحيحة' : 'Correct'}</th>
+                <th style="padding:8px;border:1px solid #e5e7eb;">${currentLang === 'ar' ? 'النتيجة' : 'Result'}</th>
+            </tr></thead>
+            <tbody>${questionsHTML}</tbody>
+        </table>
+    </div>`;
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        grade: badge,
+        answers_table: answersHTML
+    }).then(() => {
+        status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+        status.style.color = '#059669';
+        btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+    }).catch(err => {
+        status.textContent = currentLang === 'ar' ? '❌ حدث خطأ' : '❌ Error';
+        status.style.color = '#dc2626';
+        btn.disabled = false;
+        btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+        console.error(err);
+    });
+}
+
+// ==================== Initialization ====================
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        
+        if (saved.currentExam && EXAMS_DB[saved.currentExam]) {
+            loadExam(saved.currentExam);
+            if (saved.answers) restoreAnswers(saved.answers);
+            if (saved.timeRemaining) timeRemaining = saved.timeRemaining;
+            if (saved.seed) currentSeed = saved.seed;
+        }
+    }
+    
+    renderDashboard();
+    
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        document.getElementById(id).addEventListener('input', saveState);
+    });
+});
+
+window.addEventListener('beforeunload', () => saveState());
+</script>
+</body>
+</html>
